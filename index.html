@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <title>IFCS Dashboard</title>
 
+<!-- Include Google Fonts for icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
 <style>
 body {
   margin: 0;
@@ -36,7 +39,7 @@ header span {
 /* ================= LAYOUT ================= */
 .container {
   display: flex;
-  height: calc(100vh - 52px); /* header height */
+  height: calc(100vh - 52px);
 }
 
 /* ================= SIDEBAR ================= */
@@ -53,7 +56,7 @@ header span {
   z-index: 10;
 }
 
-.sidebar:hover {
+.sidebar.expanded {
   width: 180px;
 }
 
@@ -74,10 +77,12 @@ header span {
 
 .sidebar .menu-item i {
   font-style: normal;
-  width: 24px;
+  width: 30px;
   text-align: center;
+  font-size: 18px;
 }
 
+/* ================= CONTENT ================= */
 .content {
   flex: 1;
   padding: 16px;
@@ -93,7 +98,7 @@ header span {
   position: relative;
 }
 
-/* Prevent wrapping – scale instead */
+/* Scale for smaller screens */
 @media (max-width: 1200px) { .dashboard { transform: scale(0.92); transform-origin: top left; } }
 @media (max-width: 900px) { .dashboard { transform: scale(0.85); } }
 
@@ -101,7 +106,7 @@ header span {
   background: #1c2140;
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 10px rgba(0,0,0,0.35);
 }
 
 h3 { margin-top: 0; margin-bottom: 10px; font-size: 14px; }
@@ -112,7 +117,7 @@ h3 { margin-top: 0; margin-bottom: 10px; font-size: 14px; }
   display: flex;
   gap: 8px;
   padding-bottom: 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
   position: relative;
   z-index: 5;
 }
@@ -137,13 +142,12 @@ h3 { margin-top: 0; margin-bottom: 10px; font-size: 14px; }
 /* ================= FLOATING POPOVERS ================= */
 .popover {
   position: absolute;
-  left: 70px; /* always in front of sidebar */
   background: #1c2140;
   padding: 16px 18px;
   border-radius: 12px;
   min-width: 320px;
   max-width: 420px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 30px rgba(0,0,0,0.6);
   display: none;
   z-index: 20;
   animation: slideDown 0.35s ease-out forwards;
@@ -178,6 +182,9 @@ canvas { border-radius: 8px; }
 /* ================= SECOND PAGE ================= */
 .page { display: none; }
 .page.active { display: block; }
+
+/* ================= MODEL VIEWER ================= */
+model-viewer { width:100%; height:400px; background:#0f1220; border-radius:12px; }
 </style>
 </head>
 
@@ -191,8 +198,8 @@ canvas { border-radius: 8px; }
 <div class="container">
   <!-- ================= SIDEBAR ================= -->
   <div class="sidebar" id="sidebar">
-    <div class="menu-item" onclick="switchPage('dashboardPage')"><i>🏭</i><span>IFCS Dashboard</span></div>
-    <div class="menu-item" onclick="switchPage('secondPage')"><i>📊</i><span>Analytics Page</span></div>
+    <div class="menu-item" onclick="switchPage('dashboardPage')"><i>🏭</i><span>Dashboard</span></div>
+    <div class="menu-item" onclick="switchPage('secondPage')"><i>🤖</i><span>Analytics</span></div>
   </div>
 
   <!-- ================= PAGES ================= -->
@@ -208,16 +215,8 @@ canvas { border-radius: 8px; }
         </div>
 
         <!-- ================= FLOATING POPOVERS ================= -->
-        <div id="anomalyPopover" class="popover">
-          <h3>Anomaly Storytelling</h3>
-          <div class="ai-loading"><div class="spinner"></div>Cooling Unit failure detected. Packaging module at risk.</div>
-        </div>
-        <div id="maintenancePopover" class="popover">
-          <h3>Maintenance Recommendation</h3>
-          <p>Window: <strong>02:00 – 03:00</strong></p>
-          <p>Urgency: <strong style="color:#fadb14">MEDIUM</strong></p>
-          <p>Expected Risk If Delayed: <strong>+12%</strong></p>
-        </div>
+        <div id="anomalyPopover" class="popover"></div>
+        <div id="maintenancePopover" class="popover"></div>
 
         <!-- STATS -->
         <div class="top-stats">
@@ -245,12 +244,19 @@ canvas { border-radius: 8px; }
     <!-- SECOND PAGE -->
     <div id="secondPage" class="page">
       <h2>Analytics Page</h2>
-      <p>This is the second page. Navigate back using the sidebar or IFCS Dashboard title.</p>
+      <!-- 3D MODEL PREVIEW -->
+      <model-viewer src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf" 
+                    alt="Machine 3D Model"
+                    auto-rotate camera-controls 
+                    background-color="#0f1220">
+      </model-viewer>
     </div>
 
   </div>
 </div>
 
+<!-- MODEL-VIEWER SCRIPT -->
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 /* ================= PAGE SWITCH ================= */
@@ -268,13 +274,20 @@ const maintenanceTab = document.getElementById("maintenanceTab");
 const anomalyPopover = document.getElementById("anomalyPopover");
 const maintenancePopover = document.getElementById("maintenancePopover");
 
-function toggle(tab, popover) {
+function updatePopoverPosition(popover) {
+  const sidebarWidth = document.getElementById('sidebar').offsetWidth;
+  popover.style.left = (sidebarWidth + 10) + "px";
+}
+
+function toggle(tab, popover, content) {
   const open = popover.style.display === "block";
   tab.classList.toggle("active", !open);
   popover.style.display = open ? "none" : "block";
   if (!open) popover.classList.add("glow");
+  updatePopoverPosition(popover);
   setTimeout(() => popover.classList.remove("glow"), 3000);
 }
+
 anomalyTab.onclick = () => toggle(anomalyTab, anomalyPopover);
 maintenanceTab.onclick = () => toggle(maintenanceTab, maintenancePopover);
 
@@ -299,6 +312,5 @@ new Chart(document.getElementById("scrapChart"), {
   type:"bar", data:{labels:["W1","W2","W3","W4"], datasets:[{data:[5,4,6,3], backgroundColor:"#9bf6ff", barThickness:6}]}, options:{plugins:{legend:{display:false}}}
 });
 </script>
-
 </body>
 </html>
