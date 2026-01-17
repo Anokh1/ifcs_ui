@@ -3,12 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <title>IFCS Dashboard</title>
+
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style.css" />
   </head>
+
   <body>
     <!-- Header -->
     <div id="header-container"></div>
@@ -21,12 +23,14 @@
       <div class="content" id="content-container"></div>
     </div>
 
+    <!-- External libs -->
     <script
       type="module"
       src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/componentsLoader.js"></script>
+
+    <!-- App entry -->
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>

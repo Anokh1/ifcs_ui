@@ -1,0 +1,56 @@
+/* ================= CHART CARDS ================= */
+.card {
+  background: #1c2140;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+}
+
+.card h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* ================= CHART CANVAS ================= */
+.card canvas {
+  width: 100% !important;
+  height: 220px !important;
+}
+
+/* ================= DASHBOARD GRID (chart context) ================= */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* ================= TIMELINE CARD ================= */
+.timeline-container {
+  grid-column: 1 / -1;
+}
+
+.timeline {
+  display: flex;
+  height: 6px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.slot {
+  flex: 1;
+}
+
+.normal {
+  background: #52c41a;
+}
+
+.warning {
+  background: #fadb14;
+}
+
+.critical {
+  background: #ff4d4f;
+}
