@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <title>IFCS Dashboard</title>
 
-<!-- Include Google Fonts for icons -->
+<!-- Material Symbols (futuristic icons) -->
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
 <style>
@@ -31,11 +31,6 @@ header h1 {
   cursor: pointer;
 }
 
-header span {
-  font-size: 13px;
-  opacity: 0.75;
-}
-
 /* ================= LAYOUT ================= */
 .container {
   display: flex;
@@ -44,42 +39,36 @@ header span {
 
 /* ================= SIDEBAR ================= */
 .sidebar {
-  width: 60px;
+  width: 64px;
   background: #151933;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px;
-  transition: width 0.25s;
-  overflow: hidden;
-  position: relative;
-  z-index: 10;
+  padding-top: 16px;
+  gap: 12px;
+  box-shadow: inset -1px 0 rgba(255,255,255,0.05);
 }
 
-.sidebar.expanded {
-  width: 180px;
-}
-
-.sidebar .menu-item {
-  width: 100%;
-  color: #eaeaf0;
+.menu-item {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
-  padding: 10px;
-  gap: 10px;
+  justify-content: center;
   cursor: pointer;
-  transition: background 0.2s;
+  color: #9aa4ff;
+  transition: all 0.25s ease;
 }
 
-.sidebar .menu-item:hover {
-  background: rgba(255,255,255,0.1);
+.menu-item:hover {
+  background: rgba(43,92,255,0.15);
+  box-shadow: 0 0 12px rgba(43,92,255,0.6);
+  color: #fff;
 }
 
-.sidebar .menu-item i {
-  font-style: normal;
-  width: 30px;
-  text-align: center;
-  font-size: 18px;
+.material-symbols-outlined {
+  font-size: 22px;
 }
 
 /* ================= CONTENT ================= */
@@ -87,7 +76,6 @@ header span {
   flex: 1;
   padding: 16px;
   overflow-y: auto;
-  position: relative;
 }
 
 /* ================= DASHBOARD GRID ================= */
@@ -95,222 +83,159 @@ header span {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
-  position: relative;
 }
 
-/* Scale for smaller screens */
-@media (max-width: 1200px) { .dashboard { transform: scale(0.92); transform-origin: top left; } }
-@media (max-width: 900px) { .dashboard { transform: scale(0.85); } }
-
+/* ================= CARDS ================= */
 .card {
   background: #1c2140;
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.35);
+  box-shadow: 0 0 14px rgba(0,0,0,0.35);
 }
 
-h3 { margin-top: 0; margin-bottom: 10px; font-size: 14px; }
+h3 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  opacity: 0.85;
+}
 
-/* ================= TAB BAR ================= */
-.tab-bar {
+/* ================= MODEL CONTAINER ================= */
+.model-container {
   grid-column: 1 / -1;
-  display: flex;
-  gap: 8px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(145deg, #151933, #1c2140);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px;
   position: relative;
-  z-index: 5;
 }
 
-.tab {
+.model-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
-  padding: 5px 9px;
-  font-size: 12px;
-  border-radius: 6px;
-  background: #1c2140;
-  cursor: pointer;
-  opacity: 0.65;
-  transition: all 0.2s ease;
-  user-select: none;
+  margin-bottom: 8px;
 }
 
-.tab:hover { opacity: 0.9; }
-.tab.active { background: #2b5cff; opacity: 1; box-shadow: 0 0 12px rgba(43, 92, 255, 0.6); }
+.badge {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(82,196,26,0.2);
+  color: #52c41a;
+}
 
-/* ================= FLOATING POPOVERS ================= */
-.popover {
-  position: absolute;
-  background: #1c2140;
-  padding: 16px 18px;
+/* Visible frame */
+model-viewer {
+  width: 100%;
+  height: 420px;
+  background: #0f1220;
   border-radius: 12px;
-  min-width: 320px;
-  max-width: 420px;
-  box-shadow: 0 0 30px rgba(0,0,0,0.6);
-  display: none;
-  z-index: 20;
-  animation: slideDown 0.35s ease-out forwards;
+  border: 1px dashed rgba(255,255,255,0.12);
 }
 
-#anomalyPopover { top: 64px; }
-#maintenancePopover { top: 200px; }
+/* ================= MODULE LEGEND ================= */
+.legend {
+  display: flex;
+  gap: 14px;
+  font-size: 11px;
+  margin-top: 10px;
+  opacity: 0.8;
+}
 
-@keyframes slideDown { from {opacity:0; transform:translateY(-8px);} to {opacity:1; transform:translateY(0);} }
-.glow { animation: glowPulse 1.8s infinite; }
-@keyframes glowPulse {0%{box-shadow:0 0 10px rgba(255,77,79,0.3);}50%{box-shadow:0 0 28px rgba(255,77,79,0.8);}100%{box-shadow:0 0 10px rgba(255,77,79,0.3);}}
+.legend span::before {
+  content: "●";
+  margin-right: 6px;
+}
 
-.ai-loading { display:flex; gap:10px; align-items:center; font-size:13px; }
-.spinner { width:20px; height:20px; border:3px solid rgba(255,255,255,0.2); border-top:3px solid #2b5cff; border-radius:50%; animation:spin 1s linear infinite;}
-@keyframes spin { to { transform: rotate(360deg); } }
+.legend .normal::before { color: #52c41a; }
+.legend .warning::before { color: #fadb14; }
+.legend .critical::before { color: #ff4d4f; }
 
-/* ================= STATS ================= */
-.top-stats { grid-column: 1 / -1; display:flex; gap:12px; }
-.stat-card { background:#1c2140; border-radius:8px; padding:10px 14px; min-width:90px; text-align:center;}
-.stat-card h4 { margin:0; font-size:11px; opacity:0.6; font-weight:normal;}
-.stat-card p { margin:4px 0 0; font-size:15px; font-weight:bold; }
-
-/* ================= TIMELINE ================= */
-.timeline-container { grid-column: 1 / -1; }
-.timeline { display:flex; height:6px; border-radius:4px; overflow:hidden; margin-top:8px; }
-.slot { flex:1; }
-.normal { background:#52c41a; }
-.warning { background:#fadb14; }
-.critical { background:#ff4d4f; }
-canvas { border-radius: 8px; }
-
-/* ================= SECOND PAGE ================= */
+/* ================= PAGE ================= */
 .page { display: none; }
 .page.active { display: block; }
 
-/* ================= MODEL VIEWER ================= */
-model-viewer { width:100%; height:400px; background:#0f1220; border-radius:12px; }
+/* ================= CHARTS ================= */
+canvas { border-radius: 8px; }
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1 id="homeBtn">IFCS Dashboard</h1>
-  <span>Machine: Line-A-01 | Shift: Morning</span>
+  <h1 onclick="switchPage('dashboardPage')">IFCS Dashboard</h1>
+  <span>Machine: Line-A-01</span>
 </header>
 
 <div class="container">
-  <!-- ================= SIDEBAR ================= -->
-  <div class="sidebar" id="sidebar">
-    <div class="menu-item" onclick="switchPage('dashboardPage')"><i>🏭</i><span>Dashboard</span></div>
-    <div class="menu-item" onclick="switchPage('secondPage')"><i>🤖</i><span>Analytics</span></div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="menu-item" onclick="switchPage('dashboardPage')">
+      <span class="material-symbols-outlined">dashboard</span>
+    </div>
+    <div class="menu-item" onclick="switchPage('analyticsPage')">
+      <span class="material-symbols-outlined">precision_manufacturing</span>
+    </div>
   </div>
 
-  <!-- ================= PAGES ================= -->
+  <!-- CONTENT -->
   <div class="content">
-    <!-- DASHBOARD PAGE -->
+
+    <!-- DASHBOARD -->
     <div id="dashboardPage" class="page active">
       <div class="dashboard">
-
-        <!-- ================= TABS ================= -->
-        <div class="tab-bar">
-          <div class="tab" id="anomalyTab"><div class="icon anomaly"></div> Anomaly</div>
-          <div class="tab" id="maintenanceTab"><div class="icon maintenance"></div> Maintenance</div>
-        </div>
-
-        <!-- ================= FLOATING POPOVERS ================= -->
-        <div id="anomalyPopover" class="popover"></div>
-        <div id="maintenancePopover" class="popover"></div>
-
-        <!-- STATS -->
-        <div class="top-stats">
-          <div class="stat-card"><h4>Total Defects</h4><p>33</p></div>
-          <div class="stat-card"><h4>Yield %</h4><p>92</p></div>
-          <div class="stat-card"><h4>OEE %</h4><p>85</p></div>
-          <div class="stat-card"><h4>Scrap %</h4><p>5</p></div>
-        </div>
-
-        <!-- CHARTS -->
         <div class="card"><h3>Production Defects</h3><canvas id="defectsChart"></canvas></div>
-        <div class="card"><h3>Yield Rate (%)</h3><canvas id="yieldChart"></canvas></div>
-        <div class="card"><h3>OEE (%)</h3><canvas id="oeeChart"></canvas></div>
-        <div class="card"><h3>Scrap Rate (%)</h3><canvas id="scrapChart"></canvas></div>
-
-        <!-- TIMELINE -->
-        <div class="card timeline-container">
-          <h3>Risk & Maintenance Timeline</h3>
-          <div class="timeline" id="timelineBar"></div>
-        </div>
-
+        <div class="card"><h3>Yield Rate</h3><canvas id="yieldChart"></canvas></div>
+        <div class="card"><h3>OEE</h3><canvas id="oeeChart"></canvas></div>
+        <div class="card"><h3>Scrap Rate</h3><canvas id="scrapChart"></canvas></div>
       </div>
     </div>
 
-    <!-- SECOND PAGE -->
-    <div id="secondPage" class="page">
-      <h2>Analytics Page</h2>
-      <!-- 3D MODEL PREVIEW -->
-      <model-viewer src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf" 
-                    alt="Machine 3D Model"
-                    auto-rotate camera-controls 
-                    background-color="#0f1220">
-      </model-viewer>
+    <!-- ANALYTICS PAGE -->
+    <div id="analyticsPage" class="page">
+      <div class="model-container">
+        <div class="model-header">
+          <h3>Machine Digital Twin</h3>
+          <span class="badge">RUNNING</span>
+        </div>
+
+        <!-- REAL INDUSTRIAL ROBOT MODEL -->
+        <model-viewer
+          src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@master/2.0/RobotExpressive/glTF-Binary/RobotExpressive.glb"
+          camera-controls
+          auto-rotate
+          exposure="1.1"
+          shadow-intensity="1"
+          alt="Industrial Robot Arm">
+        </model-viewer>
+
+        <div class="legend">
+          <span class="normal">Normal</span>
+          <span class="warning">Warning</span>
+          <span class="critical">Critical</span>
+        </div>
+      </div>
     </div>
 
   </div>
 </div>
 
-<!-- MODEL-VIEWER SCRIPT -->
+<!-- SCRIPTS -->
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-/* ================= PAGE SWITCH ================= */
-function switchPage(pageId){
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(pageId).classList.add("active");
+function switchPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
-/* HEADER CLICK TO HOME */
-document.getElementById("homeBtn").onclick = () => switchPage('dashboardPage');
-
-/* ================= POPOVERS ================= */
-const anomalyTab = document.getElementById("anomalyTab");
-const maintenanceTab = document.getElementById("maintenanceTab");
-const anomalyPopover = document.getElementById("anomalyPopover");
-const maintenancePopover = document.getElementById("maintenancePopover");
-
-function updatePopoverPosition(popover) {
-  const sidebarWidth = document.getElementById('sidebar').offsetWidth;
-  popover.style.left = (sidebarWidth + 10) + "px";
-}
-
-function toggle(tab, popover, content) {
-  const open = popover.style.display === "block";
-  tab.classList.toggle("active", !open);
-  popover.style.display = open ? "none" : "block";
-  if (!open) popover.classList.add("glow");
-  updatePopoverPosition(popover);
-  setTimeout(() => popover.classList.remove("glow"), 3000);
-}
-
-anomalyTab.onclick = () => toggle(anomalyTab, anomalyPopover);
-maintenanceTab.onclick = () => toggle(maintenanceTab, maintenancePopover);
-
-/* ================= TIMELINE ================= */
-["normal","normal","warning","critical","critical"].forEach(t=>{
-  const d=document.createElement("div");
-  d.className=`slot ${t}`;
-  document.getElementById("timelineBar").appendChild(d);
-});
-
-/* ================= CHARTS ================= */
-new Chart(document.getElementById("defectsChart"), {
-  type:"bar", data:{labels:["A","B","C","D"], datasets:[{data:[12,7,5,9], backgroundColor:["#ff4d4f","#fadb14","#52c41a","#2b5cff"], barThickness:6}]}, options:{plugins:{legend:{display:false}}}
-});
-new Chart(document.getElementById("yieldChart"), {
-  type:"line", data:{labels:["W1","W2","W3","W4"], datasets:[{data:[92,95,90,93], borderColor:"#52c41a", tension:0.4}]}, options:{plugins:{legend:{display:false}}, scales:{y:{max:100}}}
-});
-new Chart(document.getElementById("oeeChart"), {
-  type:"line", data:{labels:["W1","W2","W3","W4"], datasets:[{data:[85,88,82,87], borderColor:"#ffadad", tension:0.4}]}, options:{plugins:{legend:{display:false}}, scales:{y:{max:100}}}
-});
-new Chart(document.getElementById("scrapChart"), {
-  type:"bar", data:{labels:["W1","W2","W3","W4"], datasets:[{data:[5,4,6,3], backgroundColor:"#9bf6ff", barThickness:6}]}, options:{plugins:{legend:{display:false}}}
-});
+new Chart(defectsChart,{type:"bar",data:{labels:["A","B","C","D"],datasets:[{data:[12,7,5,9],backgroundColor:["#ff4d4f","#fadb14","#52c41a","#2b5cff"],barThickness:4}]},options:{plugins:{legend:{display:false}}}});
+new Chart(yieldChart,{type:"line",data:{labels:["W1","W2","W3","W4"],datasets:[{data:[92,95,90,93],borderColor:"#52c41a",tension:0.4}]},options:{plugins:{legend:{display:false}},scales:{y:{max:100}}}});
+new Chart(oeeChart,{type:"line",data:{labels:["W1","W2","W3","W4"],datasets:[{data:[85,88,82,87],borderColor:"#9aa4ff",tension:0.4}]},options:{plugins:{legend:{display:false}},scales:{y:{max:100}}}});
+new Chart(scrapChart,{type:"bar",data:{labels:["W1","W2","W3","W4"],datasets:[{data:[5,4,6,3],backgroundColor:"#9bf6ff",barThickness:4}]},options:{plugins:{legend:{display:false}}}});
 </script>
+
 </body>
 </html>
