@@ -48,7 +48,6 @@ header span {
   background: #151933;
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding-top: 16px;
   gap: 12px;
   transition: width 0.25s;
@@ -65,30 +64,37 @@ header span {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.25s;
   color: #eaeaf0;
+  position: relative;
 }
 
 .sidebar .menu-item:hover {
   background: rgba(255,255,255,0.1);
 }
 
+/* Icon wrapper: flex center */
 .sidebar .menu-item i {
   font-style: normal;
-  width: 30px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 60px; /* keeps icon centered */
   font-size: 20px;
+  text-align: center;
+  flex-shrink: 0;
 }
 
+/* Text span */
 .sidebar .menu-item span {
   white-space: nowrap;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.25s, margin-left 0.25s;
+  margin-left: 8px;
 }
 
+/* Show text when expanded */
 .sidebar.expanded .menu-item span {
   opacity: 1;
 }
