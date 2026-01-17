@@ -3,16 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <title>IFCS Dashboard</title>
+
     <style>
       body {
         margin: 0;
         font-family: "Segoe UI", sans-serif;
         background: #0f1220;
         color: #eaeaf0;
-        position: relative;
         overflow-x: hidden;
       }
 
+      /* ================= HEADER ================= */
       header {
         padding: 16px 24px;
         background: #151933;
@@ -20,7 +21,6 @@
         justify-content: space-between;
         align-items: center;
       }
-
       header h1 {
         margin: 0;
         font-size: 20px;
@@ -30,6 +30,7 @@
         opacity: 0.8;
       }
 
+      /* ================= DASHBOARD GRID ================= */
       .dashboard {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -41,8 +42,7 @@
         background: #1c2140;
         border-radius: 12px;
         padding: 16px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        position: relative;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
       }
 
       h3 {
@@ -51,21 +51,34 @@
         font-size: 16px;
       }
 
-      /* .top-actions {
+      /* ================= TAB BAR ================= */
+      .tab-bar {
         grid-column: 1 / -1;
         display: flex;
-        justify-content: flex-end;
-        gap: 8px;
-      } */
-      .top-actions {
-        grid-column: 1 / -1;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 16px;
+        gap: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 8px;
       }
 
+      .tab {
+        padding: 10px 16px;
+        border-radius: 8px 8px 0 0;
+        background: #1c2140;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        opacity: 0.7;
+      }
+
+      .tab.active {
+        background: #2b5cff;
+        opacity: 1;
+        box-shadow: 0 -2px 12px rgba(43, 92, 255, 0.6);
+      }
+
+      /* ================= STATS ================= */
       .top-stats {
+        grid-column: 1 / -1;
         display: flex;
         gap: 12px;
       }
@@ -73,79 +86,62 @@
       .stat-card {
         background: #1c2140;
         border-radius: 8px;
-        padding: 10px 14px;
+        padding: 12px 16px;
+        min-width: 100px;
         text-align: center;
-        min-width: 80px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
       }
 
       .stat-card h4 {
         margin: 0;
         font-size: 12px;
+        opacity: 0.6;
         font-weight: normal;
-        opacity: 0.7;
       }
 
       .stat-card p {
-        margin: 0;
-        font-size: 14px;
+        margin: 4px 0 0;
+        font-size: 16px;
         font-weight: bold;
       }
 
-      .btn {
-        background: #2b5cff;
-        border: none;
-        color: white;
-        padding: 10px 16px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: background 0.2s ease;
-      }
-      .btn:hover {
-        background: #1f4ae0;
-      }
-
-      /* Popover styling */
+      /* ================= POPOVERS ================= */
       .popover {
         position: absolute;
-        top: 100%;
-        transform: translateY(8px);
         background: #1c2140;
         padding: 16px 20px;
         border-radius: 12px;
-        box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
-        z-index: 1000;
-        min-width: 300px;
-        max-width: 400px;
+        min-width: 320px;
+        max-width: 420px;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
         display: none;
+        z-index: 1000;
       }
+
       .slideIn {
-        animation: slideIn 0.4s ease-out forwards;
+        animation: slideIn 0.35s ease-out forwards;
       }
+
       @keyframes slideIn {
         from {
           opacity: 0;
-          transform: translateY(12px);
+          transform: translateX(10px);
         }
         to {
           opacity: 1;
-          transform: translateY(0);
+          transform: translateX(0);
         }
       }
 
       .glow {
         animation: glowPulse 1.8s infinite;
       }
+
       @keyframes glowPulse {
         0% {
           box-shadow: 0 0 10px rgba(255, 77, 79, 0.3);
         }
         50% {
-          box-shadow: 0 0 25px rgba(255, 77, 79, 0.8);
+          box-shadow: 0 0 30px rgba(255, 77, 79, 0.8);
         }
         100% {
           box-shadow: 0 0 10px rgba(255, 77, 79, 0.3);
@@ -154,10 +150,10 @@
 
       .ai-loading {
         display: flex;
-        align-items: center;
         gap: 12px;
-        opacity: 0.9;
+        align-items: center;
       }
+
       .spinner {
         width: 22px;
         height: 22px;
@@ -166,51 +162,30 @@
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
+
       @keyframes spin {
         to {
           transform: rotate(360deg);
         }
       }
 
-      .ai-result-animate {
-        animation: fadeInUp 0.5s ease-out;
-      }
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      canvas {
-        background: #1c2140;
-        border-radius: 8px;
-      }
-
-      footer {
-        padding: 10px;
-        text-align: center;
-        font-size: 12px;
-        opacity: 0.6;
-      }
-
+      /* ================= TIMELINE ================= */
       .timeline-container {
         grid-column: 1 / -1;
       }
+
       .timeline {
         display: flex;
-        height: 10px; /* thinner */
+        height: 10px;
         border-radius: 5px;
         overflow: hidden;
         margin-top: 8px;
       }
+
       .slot {
         flex: 1;
       }
+
       .normal {
         background: #52c41a;
       }
@@ -220,23 +195,13 @@
       .critical {
         background: #ff4d4f;
       }
-      .legend {
-        display: flex;
-        gap: 8px;
-        margin-top: 6px;
-        font-size: 11px;
-      }
-      .legend span {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .dot {
-        width: 8px;
-        height: 8px;
+
+      canvas {
+        border-radius: 8px;
       }
     </style>
   </head>
+
   <body>
     <header>
       <h1>IFCS Dashboard</h1>
@@ -244,290 +209,456 @@
     </header>
 
     <div class="dashboard">
-      <!-- <div class="top-actions" id="actionButtons">
-        <button class="btn" id="anomalyBtn">Anomaly Story</button>
-        <button class="btn" id="maintenanceBtn">
-          Maintenance Recommendation
-        </button>
-      </div> -->
-      <div class="top-actions">
-        <div class="top-stats">
-          <div class="stat-card">
-            <h4>Total Defects</h4>
-            <p id="totalDefects">33</p>
-          </div>
-          <div class="stat-card">
-            <h4>Yield %</h4>
-            <p id="totalYield">92</p>
-          </div>
-          <div class="stat-card">
-            <h4>OEE %</h4>
-            <p id="totalOEE">85</p>
-          </div>
-          <div class="stat-card">
-            <h4>Scrap %</h4>
-            <p id="totalScrap">5</p>
-          </div>
-        </div>
+      <!-- ================= TABS ================= -->
+      <div class="tab-bar">
+        <div class="tab" id="anomalyTab">Anomaly</div>
+        <div class="tab" id="maintenanceTab">Maintenance</div>
+      </div>
 
-        <div class="action-buttons">
-          <button class="btn" id="anomalyBtn">Anomaly Story</button>
-          <button class="btn" id="maintenanceBtn">
-            Maintenance Recommendation
-          </button>
+      <!-- ================= STATS ================= -->
+      <div class="top-stats">
+        <div class="stat-card">
+          <h4>Total Defects</h4>
+          <p>33</p>
+        </div>
+        <div class="stat-card">
+          <h4>Yield %</h4>
+          <p>92</p>
+        </div>
+        <div class="stat-card">
+          <h4>OEE %</h4>
+          <p>85</p>
+        </div>
+        <div class="stat-card">
+          <h4>Scrap %</h4>
+          <p>5</p>
         </div>
       </div>
 
-      <!-- Charts -->
-      <div class="card">
-        <h3>Production Defects</h3>
-        <canvas id="defectsChart"></canvas>
-      </div>
-      <div class="card">
-        <h3>Yield Rate (%)</h3>
-        <canvas id="yieldChart"></canvas>
-      </div>
-      <div class="card">
-        <h3>OEE (%)</h3>
-        <canvas id="oeeChart"></canvas>
-      </div>
-      <div class="card">
-        <h3>Scrap Rate (%)</h3>
-        <canvas id="scrapChart"></canvas>
-      </div>
+      <!-- ================= CHARTS ================= -->
+      <div class="card"><h3>Production Defects</h3><canvas id="defectsChart"></canvas></div>
+      <div class="card"><h3>Yield Rate (%)</h3><canvas id="yieldChart"></canvas></div>
+      <div class="card"><h3>OEE (%)</h3><canvas id="oeeChart"></canvas></div>
+      <div class="card"><h3>Scrap Rate (%)</h3><canvas id="scrapChart"></canvas></div>
 
-      <!-- Timeline -->
+      <!-- ================= TIMELINE ================= -->
       <div class="card timeline-container">
         <h3>Risk & Maintenance Timeline</h3>
         <div class="timeline" id="timelineBar"></div>
-        <div class="legend">
-          <span
-            ><div class="dot normal"></div>
-            Normal</span
-          >
-          <span
-            ><div class="dot warning"></div>
-            Warning</span
-          >
-          <span
-            ><div class="dot critical"></div>
-            Critical</span
-          >
-        </div>
       </div>
     </div>
 
-    <!-- Popovers -->
-    <div id="storyPopover" class="popover">
+    <!-- ================= POPOVERS ================= -->
+    <div id="anomalyPopover" class="popover">
       <h3>Anomaly Storytelling</h3>
-      <div id="storyLoading" class="ai-loading">
+      <div class="ai-loading">
         <div class="spinner"></div>
-        <p>AI analyzing anomaly…</p>
-      </div>
-      <div id="storyContent" class="hidden">
-        <p id="storyText"></p>
+        <p>Cooling Unit failure detected. Risk HIGH.</p>
       </div>
     </div>
 
     <div id="maintenancePopover" class="popover">
       <h3>Maintenance Recommendation</h3>
-      <div id="aiLoading" class="ai-loading">
-        <div class="spinner"></div>
-        <p>AI analyzing machine condition & risk patterns…</p>
-      </div>
-      <div id="aiResult" class="hidden">
-        <p>Recommended Window: <strong id="maintenanceWindow"></strong></p>
-        <p>Urgency: <span id="urgencyLevel"></span></p>
-        <p>Expected Risk If Delayed: <strong id="riskIncrease"></strong></p>
-      </div>
+      <p>Window: <strong>02:00 – 03:00</strong></p>
+      <p>Urgency: <strong style="color:#fadb14">MEDIUM</strong></p>
+      <p>Delay Risk: <strong>+12%</strong></p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      const aiData = {
-        anomalyText:
-          "Cooling Unit failure detected, may affect Packaging Module. Risk HIGH.",
-        maintenanceWindow: "02:00 – 03:00",
-        urgency: "MEDIUM",
-        delayRisk: "+12%",
-        timeline: ["normal", "normal", "warning", "critical", "critical"],
-        defects: [12, 7, 5, 9],
-        yield: [92, 95, 90, 93],
-        oee: [85, 88, 82, 87],
-        scrap: [5, 4, 6, 3],
-      };
+      const anomalyTab = document.getElementById("anomalyTab");
+      const maintenanceTab = document.getElementById("maintenanceTab");
+      const anomalyPopover = document.getElementById("anomalyPopover");
+      const maintenancePopover = document.getElementById("maintenancePopover");
 
-      // Helper to position popover below a button
-      function positionPopover(button, popover) {
-        const rect = button.getBoundingClientRect();
-        const popoverWidth = popover.offsetWidth;
-        let left = rect.left + window.scrollX;
+      function toggle(tab, popover, offsetY = 0) {
+        const rect = tab.getBoundingClientRect();
+        const isOpen = popover.style.display === "block";
 
-        // If popover overflows right edge, move it to the left of button
-        if (left + popoverWidth > window.innerWidth - 10) {
-          left = rect.right - popoverWidth; // align right edge with button right edge
+        tab.classList.toggle("active", !isOpen);
+        popover.style.display = isOpen ? "none" : "block";
+
+        if (!isOpen) {
+          popover.style.top = rect.bottom + window.scrollY + 10 + offsetY + "px";
+          popover.style.left = rect.right + window.scrollX + 10 + "px";
+          popover.classList.add("slideIn", "glow");
+          setTimeout(() => popover.classList.remove("glow"), 3000);
         }
-
-        popover.style.top = rect.bottom + window.scrollY + 8 + "px";
-        popover.style.left = left + "px";
       }
 
-      // Anomaly Story popover
-      const anomalyBtn = document.getElementById("anomalyBtn");
-      const storyPopover = document.getElementById("storyPopover");
-      const storyLoading = document.getElementById("storyLoading");
-      const storyContent = document.getElementById("storyContent");
-      const storyText = document.getElementById("storyText");
+      anomalyTab.onclick = () => toggle(anomalyTab, anomalyPopover, 0);
+      maintenanceTab.onclick = () => toggle(maintenanceTab, maintenancePopover, 140);
 
-      anomalyBtn.addEventListener("click", () => {
-        if (storyPopover.style.display === "block") {
-          storyPopover.style.display = "none";
-          storyContent.classList.add("hidden");
-          storyLoading.style.display = "flex";
-        } else {
-          storyPopover.style.display = "block";
-          storyPopover.classList.add("slideIn", "glow");
-          storyText.innerText = aiData.anomalyText;
-          storyLoading.style.display = "flex";
-          storyContent.classList.add("hidden");
-          positionPopover(anomalyBtn, storyPopover);
-          setTimeout(() => {
-            storyLoading.style.display = "none";
-            storyContent.classList.remove("hidden");
-          }, 3000);
-          setTimeout(() => storyPopover.classList.remove("glow"), 3000);
-        }
+      const timeline = document.getElementById("timelineBar");
+      ["normal", "normal", "warning", "critical", "critical"].forEach((t) => {
+        const d = document.createElement("div");
+        d.className = `slot ${t}`;
+        timeline.appendChild(d);
       });
 
-      // Maintenance popover
-      const maintenanceBtn = document.getElementById("maintenanceBtn");
-      const maintenancePopover = document.getElementById("maintenancePopover");
-      const aiLoading = document.getElementById("aiLoading");
-      const aiResult = document.getElementById("aiResult");
-
-      maintenanceBtn.addEventListener("click", () => {
-        if (maintenancePopover.style.display === "block") {
-          maintenancePopover.style.display = "none";
-          aiResult.classList.add("hidden");
-          aiLoading.style.display = "flex";
-        } else {
-          maintenancePopover.style.display = "block";
-          maintenancePopover.classList.add("slideIn", "glow");
-          aiLoading.style.display = "flex";
-          aiResult.classList.add("hidden");
-          positionPopover(maintenanceBtn, maintenancePopover);
-          setTimeout(() => {
-            aiLoading.style.display = "none";
-            aiResult.classList.remove("hidden");
-            aiResult.classList.add("ai-result-animate");
-            document.getElementById("maintenanceWindow").innerText =
-              aiData.maintenanceWindow;
-            document.getElementById(
-              "urgencyLevel"
-            ).innerHTML = `<span style="color:#fadb14;font-weight:bold">${aiData.urgency}</span>`;
-            document.getElementById("riskIncrease").innerText =
-              aiData.delayRisk;
-            setTimeout(() => maintenancePopover.classList.remove("glow"), 3000);
-          }, 3000);
-        }
-      });
-
-      // Timeline
-      const timelineBar = document.getElementById("timelineBar");
-      aiData.timeline.forEach((level) => {
-        const div = document.createElement("div");
-        div.className = `slot ${level}`;
-        timelineBar.appendChild(div);
-      });
-
-      // Charts
-      new Chart(document.getElementById("defectsChart"), {
+      new Chart(defectsChart, {
         type: "bar",
         data: {
-          labels: ["Module A", "Module B", "Module C", "Module D"],
+          labels: ["A", "B", "C", "D"],
           datasets: [
             {
-              label: "Defects",
-              data: aiData.defects,
+              data: [12, 7, 5, 9],
               backgroundColor: ["#ff4d4f", "#fadb14", "#52c41a", "#2b5cff"],
-              barPercentage: 0.4,
-              categoryPercentage: 0.4,
+              barPercentage: 0.35,
             },
           ],
         },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true }, x: { grid: { display: false } } },
-        },
+        options: { plugins: { legend: { display: false } } },
       });
 
-      new Chart(document.getElementById("yieldChart"), {
+      new Chart(yieldChart, {
         type: "line",
-        data: {
-          labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-          datasets: [
-            {
-              label: "Yield %",
-              data: aiData.yield,
-              borderColor: "#52c41a",
-              backgroundColor: "rgba(82,196,26,0.2)",
-              fill: true,
-              tension: 0.3,
-              pointRadius: 5,
-              pointHoverRadius: 8,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true, max: 100 } },
-        },
+        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [92, 95, 90, 93], borderColor: "#52c41a", fill: false }] },
+        options: { plugins: { legend: { display: false } }, scales: { y: { max: 100 } } },
       });
 
-      new Chart(document.getElementById("oeeChart"), {
+      new Chart(oeeChart, {
         type: "line",
-        data: {
-          labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-          datasets: [
-            {
-              label: "OEE %",
-              data: aiData.oee,
-              borderColor: "#ffadad",
-              backgroundColor: "rgba(255,173,173,0.2)",
-              fill: true,
-              tension: 0.3,
-              pointRadius: 5,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true, max: 100 } },
-        },
+        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [85, 88, 82, 87], borderColor: "#ffadad" }] },
+        options: { plugins: { legend: { display: false } }, scales: { y: { max: 100 } } },
       });
 
-      new Chart(document.getElementById("scrapChart"), {
+      new Chart(scrapChart, {
+        type: "bar",
+        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [5, 4, 6, 3], backgroundColor: "#9bf6ff", barPercentage: 0.35 }] },
+        options: { plugins: { legend: { display: false } } },
+      });
+    </script>
+  </body>
+</html><!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>IFCS Dashboard</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background: #0f1220;
+        color: #eaeaf0;
+        overflow-x: hidden;
+      }
+
+      /* ================= HEADER ================= */
+      header {
+        padding: 16px 24px;
+        background: #151933;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 20px;
+      }
+      header span {
+        font-size: 14px;
+        opacity: 0.8;
+      }
+
+      /* ================= DASHBOARD GRID ================= */
+      .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+        padding: 16px;
+      }
+
+      .card {
+        background: #1c2140;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+      }
+
+      h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      /* ================= TAB BAR ================= */
+      .tab-bar {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 8px;
+      }
+
+      .tab {
+        padding: 10px 16px;
+        border-radius: 8px 8px 0 0;
+        background: #1c2140;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        opacity: 0.7;
+      }
+
+      .tab.active {
+        background: #2b5cff;
+        opacity: 1;
+        box-shadow: 0 -2px 12px rgba(43, 92, 255, 0.6);
+      }
+
+      /* ================= STATS ================= */
+      .top-stats {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 12px;
+      }
+
+      .stat-card {
+        background: #1c2140;
+        border-radius: 8px;
+        padding: 12px 16px;
+        min-width: 100px;
+        text-align: center;
+      }
+
+      .stat-card h4 {
+        margin: 0;
+        font-size: 12px;
+        opacity: 0.6;
+        font-weight: normal;
+      }
+
+      .stat-card p {
+        margin: 4px 0 0;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      /* ================= POPOVERS ================= */
+      .popover {
+        position: absolute;
+        background: #1c2140;
+        padding: 16px 20px;
+        border-radius: 12px;
+        min-width: 320px;
+        max-width: 420px;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
+        display: none;
+        z-index: 1000;
+      }
+
+      .slideIn {
+        animation: slideIn 0.35s ease-out forwards;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .glow {
+        animation: glowPulse 1.8s infinite;
+      }
+
+      @keyframes glowPulse {
+        0% {
+          box-shadow: 0 0 10px rgba(255, 77, 79, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 30px rgba(255, 77, 79, 0.8);
+        }
+        100% {
+          box-shadow: 0 0 10px rgba(255, 77, 79, 0.3);
+        }
+      }
+
+      .ai-loading {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .spinner {
+        width: 22px;
+        height: 22px;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        border-top: 3px solid #2b5cff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ================= TIMELINE ================= */
+      .timeline-container {
+        grid-column: 1 / -1;
+      }
+
+      .timeline {
+        display: flex;
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+
+      .slot {
+        flex: 1;
+      }
+
+      .normal {
+        background: #52c41a;
+      }
+      .warning {
+        background: #fadb14;
+      }
+      .critical {
+        background: #ff4d4f;
+      }
+
+      canvas {
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>IFCS Dashboard</h1>
+      <span>Machine: Line-A-01 | Shift: Morning</span>
+    </header>
+
+    <div class="dashboard">
+      <!-- ================= TABS ================= -->
+      <div class="tab-bar">
+        <div class="tab" id="anomalyTab">Anomaly</div>
+        <div class="tab" id="maintenanceTab">Maintenance</div>
+      </div>
+
+      <!-- ================= STATS ================= -->
+      <div class="top-stats">
+        <div class="stat-card">
+          <h4>Total Defects</h4>
+          <p>33</p>
+        </div>
+        <div class="stat-card">
+          <h4>Yield %</h4>
+          <p>92</p>
+        </div>
+        <div class="stat-card">
+          <h4>OEE %</h4>
+          <p>85</p>
+        </div>
+        <div class="stat-card">
+          <h4>Scrap %</h4>
+          <p>5</p>
+        </div>
+      </div>
+
+      <!-- ================= CHARTS ================= -->
+      <div class="card"><h3>Production Defects</h3><canvas id="defectsChart"></canvas></div>
+      <div class="card"><h3>Yield Rate (%)</h3><canvas id="yieldChart"></canvas></div>
+      <div class="card"><h3>OEE (%)</h3><canvas id="oeeChart"></canvas></div>
+      <div class="card"><h3>Scrap Rate (%)</h3><canvas id="scrapChart"></canvas></div>
+
+      <!-- ================= TIMELINE ================= -->
+      <div class="card timeline-container">
+        <h3>Risk & Maintenance Timeline</h3>
+        <div class="timeline" id="timelineBar"></div>
+      </div>
+    </div>
+
+    <!-- ================= POPOVERS ================= -->
+    <div id="anomalyPopover" class="popover">
+      <h3>Anomaly Storytelling</h3>
+      <div class="ai-loading">
+        <div class="spinner"></div>
+        <p>Cooling Unit failure detected. Risk HIGH.</p>
+      </div>
+    </div>
+
+    <div id="maintenancePopover" class="popover">
+      <h3>Maintenance Recommendation</h3>
+      <p>Window: <strong>02:00 – 03:00</strong></p>
+      <p>Urgency: <strong style="color:#fadb14">MEDIUM</strong></p>
+      <p>Delay Risk: <strong>+12%</strong></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const anomalyTab = document.getElementById("anomalyTab");
+      const maintenanceTab = document.getElementById("maintenanceTab");
+      const anomalyPopover = document.getElementById("anomalyPopover");
+      const maintenancePopover = document.getElementById("maintenancePopover");
+
+      function toggle(tab, popover, offsetY = 0) {
+        const rect = tab.getBoundingClientRect();
+        const isOpen = popover.style.display === "block";
+
+        tab.classList.toggle("active", !isOpen);
+        popover.style.display = isOpen ? "none" : "block";
+
+        if (!isOpen) {
+          popover.style.top = rect.bottom + window.scrollY + 10 + offsetY + "px";
+          popover.style.left = rect.right + window.scrollX + 10 + "px";
+          popover.classList.add("slideIn", "glow");
+          setTimeout(() => popover.classList.remove("glow"), 3000);
+        }
+      }
+
+      anomalyTab.onclick = () => toggle(anomalyTab, anomalyPopover, 0);
+      maintenanceTab.onclick = () => toggle(maintenanceTab, maintenancePopover, 140);
+
+      const timeline = document.getElementById("timelineBar");
+      ["normal", "normal", "warning", "critical", "critical"].forEach((t) => {
+        const d = document.createElement("div");
+        d.className = `slot ${t}`;
+        timeline.appendChild(d);
+      });
+
+      new Chart(defectsChart, {
         type: "bar",
         data: {
-          labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+          labels: ["A", "B", "C", "D"],
           datasets: [
             {
-              label: "Scrap %",
-              data: aiData.scrap,
-              backgroundColor: ["#caffbf", "#9bf6ff", "#ffc6ff", "#b5ead7"],
-              barPercentage: 0.4,
-              categoryPercentage: 0.4,
+              data: [12, 7, 5, 9],
+              backgroundColor: ["#ff4d4f", "#fadb14", "#52c41a", "#2b5cff"],
+              barPercentage: 0.35,
             },
           ],
         },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true } },
-        },
+        options: { plugins: { legend: { display: false } } },
+      });
+
+      new Chart(yieldChart, {
+        type: "line",
+        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [92, 95, 90, 93], borderColor: "#52c41a", fill: false }] },
+        options: { plugins: { legend: { display: false } }, scales: { y: { max: 100 } } },
+      });
+
+      new Chart(oeeChart, {
+        type: "line",
+        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [85, 88, 82, 87], borderColor: "#ffadad" }] },
+        options: { plugins: { legend: { display: false } }, scales: { y: { max: 100 } } },
+      });
+
+      new Chart(scrapChart, {
+        type: "bar",
+        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [5, 4, 6, 3], backgroundColor: "#9bf6ff", barPercentage: 0.35 }] },
+        options: { plugins: { legend: { display: false } } },
       });
     </script>
   </body>
