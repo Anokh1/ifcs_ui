@@ -15,19 +15,21 @@
 
       /* ================= HEADER ================= */
       header {
-        padding: 16px 24px;
+        padding: 14px 24px;
         background: #151933;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
+
       header h1 {
         margin: 0;
-        font-size: 20px;
+        font-size: 18px;
       }
+
       header span {
-        font-size: 14px;
-        opacity: 0.8;
+        font-size: 13px;
+        opacity: 0.75;
       }
 
       /* ================= DASHBOARD GRID ================= */
@@ -48,32 +50,57 @@
       h3 {
         margin-top: 0;
         margin-bottom: 10px;
-        font-size: 16px;
+        font-size: 15px;
       }
 
       /* ================= TAB BAR ================= */
       .tab-bar {
         grid-column: 1 / -1;
         display: flex;
-        gap: 12px;
+        gap: 8px;
+        padding-bottom: 6px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        padding-bottom: 8px;
       }
 
       .tab {
-        padding: 10px 16px;
-        border-radius: 8px 8px 0 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        font-size: 13px;
+        border-radius: 6px;
         background: #1c2140;
         cursor: pointer;
-        font-size: 14px;
+        opacity: 0.65;
         transition: all 0.2s ease;
-        opacity: 0.7;
+        user-select: none;
+      }
+
+      .tab:hover {
+        opacity: 0.9;
       }
 
       .tab.active {
         background: #2b5cff;
         opacity: 1;
-        box-shadow: 0 -2px 12px rgba(43, 92, 255, 0.6);
+        box-shadow: 0 0 12px rgba(43, 92, 255, 0.6);
+      }
+
+      /* Simple CSS icons */
+      .icon {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      .icon.anomaly {
+        background: #ff4d4f;
+        box-shadow: 0 0 6px rgba(255, 77, 79, 0.8);
+      }
+
+      .icon.maintenance {
+        background: #fadb14;
+        box-shadow: 0 0 6px rgba(250, 219, 20, 0.8);
       }
 
       /* ================= STATS ================= */
@@ -86,49 +113,45 @@
       .stat-card {
         background: #1c2140;
         border-radius: 8px;
-        padding: 12px 16px;
-        min-width: 100px;
+        padding: 10px 14px;
+        min-width: 90px;
         text-align: center;
       }
 
       .stat-card h4 {
         margin: 0;
-        font-size: 12px;
+        font-size: 11px;
         opacity: 0.6;
         font-weight: normal;
       }
 
       .stat-card p {
         margin: 4px 0 0;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: bold;
       }
 
       /* ================= POPOVERS ================= */
       .popover {
-        position: absolute;
+        grid-column: 1 / -1;
         background: #1c2140;
-        padding: 16px 20px;
+        padding: 16px 18px;
         border-radius: 12px;
         min-width: 320px;
         max-width: 420px;
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.25);
         display: none;
-        z-index: 1000;
+        animation: slideDown 0.35s ease-out forwards;
       }
 
-      .slideIn {
-        animation: slideIn 0.35s ease-out forwards;
-      }
-
-      @keyframes slideIn {
+      @keyframes slideDown {
         from {
           opacity: 0;
-          transform: translateX(10px);
+          transform: translateY(-8px);
         }
         to {
           opacity: 1;
-          transform: translateX(0);
+          transform: translateY(0);
         }
       }
 
@@ -141,7 +164,7 @@
           box-shadow: 0 0 10px rgba(255, 77, 79, 0.3);
         }
         50% {
-          box-shadow: 0 0 30px rgba(255, 77, 79, 0.8);
+          box-shadow: 0 0 28px rgba(255, 77, 79, 0.8);
         }
         100% {
           box-shadow: 0 0 10px rgba(255, 77, 79, 0.3);
@@ -150,13 +173,14 @@
 
       .ai-loading {
         display: flex;
-        gap: 12px;
+        gap: 10px;
         align-items: center;
+        font-size: 13px;
       }
 
       .spinner {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
         border: 3px solid rgba(255, 255, 255, 0.2);
         border-top: 3px solid #2b5cff;
         border-radius: 50%;
@@ -211,8 +235,30 @@
     <div class="dashboard">
       <!-- ================= TABS ================= -->
       <div class="tab-bar">
-        <div class="tab" id="anomalyTab">Anomaly</div>
-        <div class="tab" id="maintenanceTab">Maintenance</div>
+        <div class="tab" id="anomalyTab">
+          <div class="icon anomaly"></div>
+          Anomaly
+        </div>
+        <div class="tab" id="maintenanceTab">
+          <div class="icon maintenance"></div>
+          Maintenance
+        </div>
+      </div>
+
+      <!-- ================= POPOVERS (STACKED) ================= -->
+      <div id="anomalyPopover" class="popover">
+        <h3>Anomaly Storytelling</h3>
+        <div class="ai-loading">
+          <div class="spinner"></div>
+          Cooling Unit failure detected. Packaging module at risk.
+        </div>
+      </div>
+
+      <div id="maintenancePopover" class="popover">
+        <h3>Maintenance Recommendation</h3>
+        <p>Window: <strong>02:00 – 03:00</strong></p>
+        <p>Urgency: <strong style="color:#fadb14">MEDIUM</strong></p>
+        <p>Expected Risk If Delayed: <strong>+12%</strong></p>
       </div>
 
       <!-- ================= STATS ================= -->
@@ -248,22 +294,6 @@
       </div>
     </div>
 
-    <!-- ================= POPOVERS ================= -->
-    <div id="anomalyPopover" class="popover">
-      <h3>Anomaly Storytelling</h3>
-      <div class="ai-loading">
-        <div class="spinner"></div>
-        <p>Cooling Unit failure detected. Risk HIGH.</p>
-      </div>
-    </div>
-
-    <div id="maintenancePopover" class="popover">
-      <h3>Maintenance Recommendation</h3>
-      <p>Window: <strong>02:00 – 03:00</strong></p>
-      <p>Urgency: <strong style="color:#fadb14">MEDIUM</strong></p>
-      <p>Delay Risk: <strong>+12%</strong></p>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       const anomalyTab = document.getElementById("anomalyTab");
@@ -271,23 +301,16 @@
       const anomalyPopover = document.getElementById("anomalyPopover");
       const maintenancePopover = document.getElementById("maintenancePopover");
 
-      function toggle(tab, popover, offsetY = 0) {
-        const rect = tab.getBoundingClientRect();
+      function toggle(tab, popover) {
         const isOpen = popover.style.display === "block";
-
         tab.classList.toggle("active", !isOpen);
         popover.style.display = isOpen ? "none" : "block";
-
-        if (!isOpen) {
-          popover.style.top = rect.bottom + window.scrollY + 10 + offsetY + "px";
-          popover.style.left = rect.right + window.scrollX + 10 + "px";
-          popover.classList.add("slideIn", "glow");
-          setTimeout(() => popover.classList.remove("glow"), 3000);
-        }
+        if (!isOpen) popover.classList.add("glow");
+        setTimeout(() => popover.classList.remove("glow"), 3000);
       }
 
-      anomalyTab.onclick = () => toggle(anomalyTab, anomalyPopover, 0);
-      maintenanceTab.onclick = () => toggle(maintenanceTab, maintenancePopover, 140);
+      anomalyTab.onclick = () => toggle(anomalyTab, anomalyPopover);
+      maintenanceTab.onclick = () => toggle(maintenanceTab, maintenancePopover);
 
       const timeline = document.getElementById("timelineBar");
       ["normal", "normal", "warning", "critical", "critical"].forEach((t) => {
@@ -313,351 +336,28 @@
 
       new Chart(yieldChart, {
         type: "line",
-        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [92, 95, 90, 93], borderColor: "#52c41a", fill: false }] },
+        data: {
+          labels: ["W1", "W2", "W3", "W4"],
+          datasets: [{ data: [92, 95, 90, 93], borderColor: "#52c41a" }],
+        },
         options: { plugins: { legend: { display: false } }, scales: { y: { max: 100 } } },
       });
 
       new Chart(oeeChart, {
         type: "line",
-        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [85, 88, 82, 87], borderColor: "#ffadad" }] },
+        data: {
+          labels: ["W1", "W2", "W3", "W4"],
+          datasets: [{ data: [85, 88, 82, 87], borderColor: "#ffadad" }],
+        },
         options: { plugins: { legend: { display: false } }, scales: { y: { max: 100 } } },
       });
 
       new Chart(scrapChart, {
-        type: "bar",
-        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [5, 4, 6, 3], backgroundColor: "#9bf6ff", barPercentage: 0.35 }] },
-        options: { plugins: { legend: { display: false } } },
-      });
-    </script>
-  </body>
-</html><!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>IFCS Dashboard</title>
-
-    <style>
-      body {
-        margin: 0;
-        font-family: "Segoe UI", sans-serif;
-        background: #0f1220;
-        color: #eaeaf0;
-        overflow-x: hidden;
-      }
-
-      /* ================= HEADER ================= */
-      header {
-        padding: 16px 24px;
-        background: #151933;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      header h1 {
-        margin: 0;
-        font-size: 20px;
-      }
-      header span {
-        font-size: 14px;
-        opacity: 0.8;
-      }
-
-      /* ================= DASHBOARD GRID ================= */
-      .dashboard {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
-        padding: 16px;
-      }
-
-      .card {
-        background: #1c2140;
-        border-radius: 12px;
-        padding: 16px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
-      }
-
-      h3 {
-        margin-top: 0;
-        margin-bottom: 10px;
-        font-size: 16px;
-      }
-
-      /* ================= TAB BAR ================= */
-      .tab-bar {
-        grid-column: 1 / -1;
-        display: flex;
-        gap: 12px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        padding-bottom: 8px;
-      }
-
-      .tab {
-        padding: 10px 16px;
-        border-radius: 8px 8px 0 0;
-        background: #1c2140;
-        cursor: pointer;
-        font-size: 14px;
-        transition: all 0.2s ease;
-        opacity: 0.7;
-      }
-
-      .tab.active {
-        background: #2b5cff;
-        opacity: 1;
-        box-shadow: 0 -2px 12px rgba(43, 92, 255, 0.6);
-      }
-
-      /* ================= STATS ================= */
-      .top-stats {
-        grid-column: 1 / -1;
-        display: flex;
-        gap: 12px;
-      }
-
-      .stat-card {
-        background: #1c2140;
-        border-radius: 8px;
-        padding: 12px 16px;
-        min-width: 100px;
-        text-align: center;
-      }
-
-      .stat-card h4 {
-        margin: 0;
-        font-size: 12px;
-        opacity: 0.6;
-        font-weight: normal;
-      }
-
-      .stat-card p {
-        margin: 4px 0 0;
-        font-size: 16px;
-        font-weight: bold;
-      }
-
-      /* ================= POPOVERS ================= */
-      .popover {
-        position: absolute;
-        background: #1c2140;
-        padding: 16px 20px;
-        border-radius: 12px;
-        min-width: 320px;
-        max-width: 420px;
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
-        display: none;
-        z-index: 1000;
-      }
-
-      .slideIn {
-        animation: slideIn 0.35s ease-out forwards;
-      }
-
-      @keyframes slideIn {
-        from {
-          opacity: 0;
-          transform: translateX(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(0);
-        }
-      }
-
-      .glow {
-        animation: glowPulse 1.8s infinite;
-      }
-
-      @keyframes glowPulse {
-        0% {
-          box-shadow: 0 0 10px rgba(255, 77, 79, 0.3);
-        }
-        50% {
-          box-shadow: 0 0 30px rgba(255, 77, 79, 0.8);
-        }
-        100% {
-          box-shadow: 0 0 10px rgba(255, 77, 79, 0.3);
-        }
-      }
-
-      .ai-loading {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-      }
-
-      .spinner {
-        width: 22px;
-        height: 22px;
-        border: 3px solid rgba(255, 255, 255, 0.2);
-        border-top: 3px solid #2b5cff;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      /* ================= TIMELINE ================= */
-      .timeline-container {
-        grid-column: 1 / -1;
-      }
-
-      .timeline {
-        display: flex;
-        height: 10px;
-        border-radius: 5px;
-        overflow: hidden;
-        margin-top: 8px;
-      }
-
-      .slot {
-        flex: 1;
-      }
-
-      .normal {
-        background: #52c41a;
-      }
-      .warning {
-        background: #fadb14;
-      }
-      .critical {
-        background: #ff4d4f;
-      }
-
-      canvas {
-        border-radius: 8px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <header>
-      <h1>IFCS Dashboard</h1>
-      <span>Machine: Line-A-01 | Shift: Morning</span>
-    </header>
-
-    <div class="dashboard">
-      <!-- ================= TABS ================= -->
-      <div class="tab-bar">
-        <div class="tab" id="anomalyTab">Anomaly</div>
-        <div class="tab" id="maintenanceTab">Maintenance</div>
-      </div>
-
-      <!-- ================= STATS ================= -->
-      <div class="top-stats">
-        <div class="stat-card">
-          <h4>Total Defects</h4>
-          <p>33</p>
-        </div>
-        <div class="stat-card">
-          <h4>Yield %</h4>
-          <p>92</p>
-        </div>
-        <div class="stat-card">
-          <h4>OEE %</h4>
-          <p>85</p>
-        </div>
-        <div class="stat-card">
-          <h4>Scrap %</h4>
-          <p>5</p>
-        </div>
-      </div>
-
-      <!-- ================= CHARTS ================= -->
-      <div class="card"><h3>Production Defects</h3><canvas id="defectsChart"></canvas></div>
-      <div class="card"><h3>Yield Rate (%)</h3><canvas id="yieldChart"></canvas></div>
-      <div class="card"><h3>OEE (%)</h3><canvas id="oeeChart"></canvas></div>
-      <div class="card"><h3>Scrap Rate (%)</h3><canvas id="scrapChart"></canvas></div>
-
-      <!-- ================= TIMELINE ================= -->
-      <div class="card timeline-container">
-        <h3>Risk & Maintenance Timeline</h3>
-        <div class="timeline" id="timelineBar"></div>
-      </div>
-    </div>
-
-    <!-- ================= POPOVERS ================= -->
-    <div id="anomalyPopover" class="popover">
-      <h3>Anomaly Storytelling</h3>
-      <div class="ai-loading">
-        <div class="spinner"></div>
-        <p>Cooling Unit failure detected. Risk HIGH.</p>
-      </div>
-    </div>
-
-    <div id="maintenancePopover" class="popover">
-      <h3>Maintenance Recommendation</h3>
-      <p>Window: <strong>02:00 – 03:00</strong></p>
-      <p>Urgency: <strong style="color:#fadb14">MEDIUM</strong></p>
-      <p>Delay Risk: <strong>+12%</strong></p>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-      const anomalyTab = document.getElementById("anomalyTab");
-      const maintenanceTab = document.getElementById("maintenanceTab");
-      const anomalyPopover = document.getElementById("anomalyPopover");
-      const maintenancePopover = document.getElementById("maintenancePopover");
-
-      function toggle(tab, popover, offsetY = 0) {
-        const rect = tab.getBoundingClientRect();
-        const isOpen = popover.style.display === "block";
-
-        tab.classList.toggle("active", !isOpen);
-        popover.style.display = isOpen ? "none" : "block";
-
-        if (!isOpen) {
-          popover.style.top = rect.bottom + window.scrollY + 10 + offsetY + "px";
-          popover.style.left = rect.right + window.scrollX + 10 + "px";
-          popover.classList.add("slideIn", "glow");
-          setTimeout(() => popover.classList.remove("glow"), 3000);
-        }
-      }
-
-      anomalyTab.onclick = () => toggle(anomalyTab, anomalyPopover, 0);
-      maintenanceTab.onclick = () => toggle(maintenanceTab, maintenancePopover, 140);
-
-      const timeline = document.getElementById("timelineBar");
-      ["normal", "normal", "warning", "critical", "critical"].forEach((t) => {
-        const d = document.createElement("div");
-        d.className = `slot ${t}`;
-        timeline.appendChild(d);
-      });
-
-      new Chart(defectsChart, {
         type: "bar",
         data: {
-          labels: ["A", "B", "C", "D"],
-          datasets: [
-            {
-              data: [12, 7, 5, 9],
-              backgroundColor: ["#ff4d4f", "#fadb14", "#52c41a", "#2b5cff"],
-              barPercentage: 0.35,
-            },
-          ],
+          labels: ["W1", "W2", "W3", "W4"],
+          datasets: [{ data: [5, 4, 6, 3], backgroundColor: "#9bf6ff", barPercentage: 0.35 }],
         },
-        options: { plugins: { legend: { display: false } } },
-      });
-
-      new Chart(yieldChart, {
-        type: "line",
-        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [92, 95, 90, 93], borderColor: "#52c41a", fill: false }] },
-        options: { plugins: { legend: { display: false } }, scales: { y: { max: 100 } } },
-      });
-
-      new Chart(oeeChart, {
-        type: "line",
-        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [85, 88, 82, 87], borderColor: "#ffadad" }] },
-        options: { plugins: { legend: { display: false } }, scales: { y: { max: 100 } } },
-      });
-
-      new Chart(scrapChart, {
-        type: "bar",
-        data: { labels: ["W1", "W2", "W3", "W4"], datasets: [{ data: [5, 4, 6, 3], backgroundColor: "#9bf6ff", barPercentage: 0.35 }] },
         options: { plugins: { legend: { display: false } } },
       });
     </script>
