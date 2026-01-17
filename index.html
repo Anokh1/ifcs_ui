@@ -1,102 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>IFCS Dashboard</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>IFCS Dashboard</title>
 
-<!-- Material Symbols for icons -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <!-- Material Symbols for icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
 
-<!-- External CSS -->
-<link rel="stylesheet" href="css/style.css">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1 id="homeBtn">IFCS Dashboard</h1>
+      <span>Machine: Line-A-01 | Shift: Morning</span>
+    </header>
 
-</head>
-<body>
-
-<header>
-  <h1 id="homeBtn">IFCS Dashboard</h1>
-  <span>Machine: Line-A-01 | Shift: Morning</span>
-</header>
-
-<div class="container">
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
-    <div class="menu-item" onclick="switchPage('dashboardPage')">
-      <i class="material-symbols-outlined">dashboard</i><span>Dashboard</span>
-    </div>
-    <div class="menu-item" onclick="switchPage('analyticsPage')">
-      <i class="material-symbols-outlined">precision_manufacturing</i><span>Analytics</span>
-    </div>
-  </div>
-
-  <!-- CONTENT -->
-  <div class="content">
-    <!-- DASHBOARD PAGE -->
-    <div id="dashboardPage" class="page active">
-      <div class="dashboard">
-        <!-- TABS -->
-        <div class="tab-bar">
-          <div class="tab" id="anomalyTab">Anomaly</div>
-          <div class="tab" id="maintenanceTab">Maintenance</div>
+    <div class="container">
+      <!-- SIDEBAR -->
+      <div class="sidebar" id="sidebar">
+        <div class="menu-item" onclick="switchPage('dashboardPage')">
+          <i class="material-symbols-outlined">dashboard</i
+          ><span>Dashboard</span>
         </div>
-
-        <!-- POPOVERS -->
-        <div id="anomalyPopover" class="popover">
-          Anomaly detected! 
-          <div class="ai-loading">
-            <div class="spinner"></div>Loading AI...
-          </div>
-        </div>
-        <div id="maintenancePopover" class="popover">
-          Maintenance scheduled 
-          <div class="ai-loading">
-            <div class="spinner"></div>Loading AI...
-          </div>
-        </div>
-
-        <!-- STATS -->
-        <div class="top-stats">
-          <div class="stat-card"><h4>Total Defects</h4><p>33</p></div>
-          <div class="stat-card"><h4>Yield %</h4><p>92</p></div>
-          <div class="stat-card"><h4>OEE %</h4><p>85</p></div>
-          <div class="stat-card"><h4>Scrap %</h4><p>5</p></div>
-        </div>
-
-        <!-- CHARTS -->
-        <div class="card"><h3>Production Defects</h3><canvas id="defectsChart"></canvas></div>
-        <div class="card"><h3>Yield Rate (%)</h3><canvas id="yieldChart"></canvas></div>
-        <div class="card"><h3>OEE (%)</h3><canvas id="oeeChart"></canvas></div>
-        <div class="card"><h3>Scrap Rate (%)</h3><canvas id="scrapChart"></canvas></div>
-
-        <!-- TIMELINE -->
-        <div class="card timeline-container">
-          <h3>Risk & Maintenance Timeline</h3>
-          <div class="timeline" id="timelineBar"></div>
+        <div class="menu-item" onclick="switchPage('analyticsPage')">
+          <i class="material-symbols-outlined">precision_manufacturing</i
+          ><span>Analytics</span>
         </div>
       </div>
-    </div>
 
-    <!-- ANALYTICS PAGE -->
-    <div id="analyticsPage" class="page">
-      <div class="model-container">
-        <h3>Machine Digital Twin</h3>
-        <model-viewer
+      <!-- CONTENT -->
+      <div class="content">
+        <!-- DASHBOARD PAGE -->
+        <div id="dashboardPage" class="page active">
+          <div class="dashboard">
+            <!-- TABS -->
+            <div class="tab-bar">
+              <div class="tab" id="anomalyTab">Anomaly</div>
+              <div class="tab" id="maintenanceTab">Maintenance</div>
+            </div>
+
+            <!-- POPOVERS -->
+            <div id="anomalyPopover" class="popover">
+              Anomaly detected!
+              <div class="ai-loading">
+                <div class="spinner"></div>
+                Loading AI...
+              </div>
+            </div>
+            <div id="maintenancePopover" class="popover">
+              Maintenance scheduled
+              <div class="ai-loading">
+                <div class="spinner"></div>
+                Loading AI...
+              </div>
+            </div>
+
+            <!-- STATS -->
+            <div class="top-stats">
+              <div class="stat-card">
+                <h4>Total Defects</h4>
+                <p>33</p>
+              </div>
+              <div class="stat-card">
+                <h4>Yield %</h4>
+                <p>92</p>
+              </div>
+              <div class="stat-card">
+                <h4>OEE %</h4>
+                <p>85</p>
+              </div>
+              <div class="stat-card">
+                <h4>Scrap %</h4>
+                <p>5</p>
+              </div>
+            </div>
+
+            <!-- CHARTS -->
+            <div class="card">
+              <h3>Production Defects</h3>
+              <canvas id="defectsChart"></canvas>
+            </div>
+            <div class="card">
+              <h3>Yield Rate (%)</h3>
+              <canvas id="yieldChart"></canvas>
+            </div>
+            <div class="card">
+              <h3>OEE (%)</h3>
+              <canvas id="oeeChart"></canvas>
+            </div>
+            <div class="card">
+              <h3>Scrap Rate (%)</h3>
+              <canvas id="scrapChart"></canvas>
+            </div>
+
+            <!-- TIMELINE -->
+            <div class="card timeline-container">
+              <h3>Risk & Maintenance Timeline</h3>
+              <div class="timeline" id="timelineBar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANALYTICS PAGE -->
+        <div id="analyticsPage" class="page">
+          <div class="model-container">
+            <h3>Machine Digital Twin</h3>
+            <!-- <model-viewer
           src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models/2.0/RobotExpressive/glTF-Binary/RobotExpressive.glb"
           alt="Industrial Robot Arm"
           camera-controls
           auto-rotate
           exposure="1.1"
           shadow-intensity="1">
-        </model-viewer>
+        </model-viewer> -->
+            <model-viewer
+              src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
+              alt="Damaged Helmet"
+              camera-controls
+              auto-rotate
+              background-color="#0f1220"
+            >
+            </model-viewer>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- Scripts -->
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="js/main.js"></script>
-
-</body>
+    <!-- Scripts -->
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>
