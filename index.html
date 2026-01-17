@@ -39,6 +39,7 @@ header span {
   height: calc(100vh - 52px); /* header height */
 }
 
+/* ================= SIDEBAR ================= */
 .sidebar {
   width: 60px;
   background: #151933;
@@ -48,9 +49,11 @@ header span {
   padding-top: 20px;
   transition: width 0.25s;
   overflow: hidden;
+  position: relative;
+  z-index: 10;
 }
 
-.sidebar.expanded {
+.sidebar:hover {
   width: 180px;
 }
 
@@ -79,6 +82,7 @@ header span {
   flex: 1;
   padding: 16px;
   overflow-y: auto;
+  position: relative;
 }
 
 /* ================= DASHBOARD GRID ================= */
@@ -100,11 +104,7 @@ header span {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
 }
 
-h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
+h3 { margin-top: 0; margin-bottom: 10px; font-size: 14px; }
 
 /* ================= TAB BAR ================= */
 .tab-bar {
@@ -137,7 +137,7 @@ h3 {
 /* ================= FLOATING POPOVERS ================= */
 .popover {
   position: absolute;
-  left: 80px;
+  left: 70px; /* always in front of sidebar */
   background: #1c2140;
   padding: 16px 18px;
   border-radius: 12px;
@@ -148,6 +148,7 @@ h3 {
   z-index: 20;
   animation: slideDown 0.35s ease-out forwards;
 }
+
 #anomalyPopover { top: 64px; }
 #maintenancePopover { top: 200px; }
 
@@ -192,7 +193,6 @@ canvas { border-radius: 8px; }
   <div class="sidebar" id="sidebar">
     <div class="menu-item" onclick="switchPage('dashboardPage')"><i>🏭</i><span>IFCS Dashboard</span></div>
     <div class="menu-item" onclick="switchPage('secondPage')"><i>📊</i><span>Analytics Page</span></div>
-    <button onclick="toggleSidebar()" style="margin-top:20px;">☰</button>
   </div>
 
   <!-- ================= PAGES ================= -->
@@ -253,10 +253,6 @@ canvas { border-radius: 8px; }
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-/* ================= SIDEBAR TOGGLE ================= */
-const sidebar = document.getElementById("sidebar");
-function toggleSidebar() { sidebar.classList.toggle("expanded"); }
-
 /* ================= PAGE SWITCH ================= */
 function switchPage(pageId){
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
