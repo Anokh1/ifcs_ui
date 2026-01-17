@@ -1,0 +1,17 @@
+header {
+    padding: 14px 24px;
+    background: #151933;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  header span {
+    font-size: 13px;
+    opacity: 0.75;
+  }
+  

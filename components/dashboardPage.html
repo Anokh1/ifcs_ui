@@ -1,0 +1,56 @@
+<div id="dashboardPage" class="page active">
+  <div class="dashboard">
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <div class="tab" id="anomalyTab">Anomaly Storytelling</div>
+      <div class="tab" id="maintenanceTab">Maintenance Suggestion</div>
+    </div>
+
+    <!-- Popovers -->
+    <div id="popovers-container"></div>
+
+    <!-- Stats -->
+    <div class="top-stats">
+      <div class="stat-card">
+        <h4>Total Defects</h4>
+        <p>33</p>
+      </div>
+      <div class="stat-card">
+        <h4>Yield %</h4>
+        <p>92</p>
+      </div>
+      <div class="stat-card">
+        <h4>OEE %</h4>
+        <p>85</p>
+      </div>
+      <div class="stat-card">
+        <h4>Scrap %</h4>
+        <p>5</p>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="card">
+      <h3>Production Defects</h3>
+      <canvas id="defectsChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Yield Rate (%)</h3>
+      <canvas id="yieldChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>OEE (%)</h3>
+      <canvas id="oeeChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Scrap Rate (%)</h3>
+      <canvas id="scrapChart"></canvas>
+    </div>
+
+    <!-- Timeline -->
+    <div class="card timeline-container">
+      <h3>Risk & Maintenance Timeline</h3>
+      <div class="timeline" id="timelineBar"></div>
+    </div>
+  </div>
+</div>

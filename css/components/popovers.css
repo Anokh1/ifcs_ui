@@ -1,0 +1,56 @@
+.popover {
+  position: absolute;
+  background: #1c2140;
+  padding: 16px 18px;
+  border-radius: 12px;
+  min-width: 320px;
+  max-width: 300px;
+  word-break: break-word;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  display: none;
+  z-index: 20;
+  animation: slideDown 0.35s ease-out forwards;
+}
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.glow {
+  animation: glowPulse 1.8s infinite;
+}
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 77, 79, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(255, 77, 79, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 77, 79, 0.3);
+  }
+}
+.ai-loading {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+}
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top: 3px solid #2b5cff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
