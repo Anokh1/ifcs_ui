@@ -1,329 +1,227 @@
-/* PAGE SWITCH */
-function switchPage(id) {
-  document
-    .querySelectorAll(".page")
-    .forEach((p) => p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+/**
+ * IFCS DASHBOARD - KEY SCRIPT
+ * Handles mock data generation, simulation loops, and UI updates.
+ */
+
+// ================= CONSTANTS & CONFIG =================
+const CONFIG = {
+    updateInterval: 2000, // ms
+    timelineHours: 8,
+    initialRisk: 15, // %
+    anomalyChance: 0.1
+};
+
+// ================= MOCK DATA STATE =================
+const SYSTEM_STATE = {
+    oee: 85,
+    yield: 92.4,
+    cycleTime: 45, // seconds
+    riskScore: CONFIG.initialRisk,
+    anomalies: [],
+    timeline: [], // Future predictions
+    insights: [],
+    activeModel: 'helmet' // Track which 3D model is showing
+};
+
+// ================= DOM ELEMENTS =================
+const UI = {
+    clock: document.getElementById('clock'),
+    kpiOEE: document.getElementById('kpi-oee'),
+    kpiYield: document.getElementById('kpi-yield'),
+    kpiCycle: document.getElementById('kpi-cycle'),
+    kpiRisk: document.getElementById('kpi-risk'),
+    anomalyContainer: document.getElementById('anomaly-container'),
+    insightsContainer: document.getElementById('insights-container'),
+    timelineVis: document.getElementById('timeline-vis'),
+    twinOverlay: document.getElementById('twin-overlay'),
+    viewer: document.getElementById('main-viewer')
+};
+
+// ================= INITIALIZATION =================
+function init() {
+    updateClock();
+    setInterval(updateClock, 1000);
+    
+    // Initial Data Seed
+    generateTimeline();
+    generateInsights();
+    render(); // Initial render
+
+    // Start Simulation Loop
+    setInterval(simulationTick, CONFIG.updateInterval);
 }
 
-/* SIDEBAR HOVER EXPAND */
-const sidebar = document.getElementById("sidebar");
-sidebar.addEventListener("mouseenter", () => sidebar.classList.add("expanded"));
-sidebar.addEventListener("mouseleave", () =>
-  sidebar.classList.remove("expanded")
-);
-
-/* TIMELINE */
-["normal", "normal", "warning", "critical", "critical"].forEach((t) => {
-  const d = document.createElement("div");
-  d.className = `slot ${t}`;
-  document.getElementById("timelineBar").appendChild(d);
-});
-
-/* CHARTS */
-new Chart(document.getElementById("defectsChart"), {
-  type: "bar",
-  data: {
-    labels: ["A", "B", "C", "D"],
-    datasets: [
-      {
-        data: [12, 7, 5, 9],
-        backgroundColor: ["#ff4d4f", "#fadb14", "#52c41a", "#2b5cff"],
-        barThickness: 6,
-      },
-    ],
-  },
-  options: { plugins: { legend: { display: false } } },
-});
-
-new Chart(document.getElementById("yieldChart"), {
-  type: "line",
-  data: {
-    labels: ["W1", "W2", "W3", "W4"],
-    datasets: [
-      { data: [92, 95, 90, 93], borderColor: "#52c41a", tension: 0.4 },
-    ],
-  },
-  options: {
-    plugins: { legend: { display: false } },
-    scales: { y: { max: 100 } },
-  },
-});
-
-new Chart(document.getElementById("oeeChart"), {
-  type: "line",
-  data: {
-    labels: ["W1", "W2", "W3", "W4"],
-    datasets: [
-      { data: [85, 88, 82, 87], borderColor: "#9aa4ff", tension: 0.4 },
-    ],
-  },
-  options: {
-    plugins: { legend: { display: false } },
-    scales: { y: { max: 100 } },
-  },
-});
-
-new Chart(document.getElementById("scrapChart"), {
-  type: "bar",
-  data: {
-    labels: ["W1", "W2", "W3", "W4"],
-    datasets: [
-      { data: [5, 4, 6, 3], backgroundColor: "#9bf6ff", barThickness: 6 },
-    ],
-  },
-  options: { plugins: { legend: { display: false } } },
-});
-
-const value = 72; // 0–100
-
-const ctxGC = document.getElementById("gaugeChart").getContext("2d");
-
-const gaugeChart = new Chart(ctxGC, {
-  type: "doughnut",
-  data: {
-    datasets: [
-      {
-        data: [value, 100 - value],
-        backgroundColor: [
-          value > 80 ? "#52c41a" : value > 50 ? "#fadb14" : "#ff4d4f",
-          "rgba(255,255,255,0.08)",
-        ],
-        borderWidth: 0,
-        cutout: "80%",
-        circumference: 180,
-        rotation: 270,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { display: false },
-      tooltip: { enabled: false },
-    },
-  },
-  plugins: [
-    {
-      id: "centerText",
-      afterDraw(chart) {
-        const { ctx, chartArea } = chart;
-        ctx.save();
-
-        ctxGC.font = "bold 28px Segoe UI";
-        ctxGC.fillStyle = "#eaeaf0";
-        ctxGC.textAlign = "center";
-        ctxGC.fillText(
-          `${value}%`,
-          (chartArea.left + chartArea.right) / 2,
-          chartArea.bottom - 20
-        );
-
-        ctxGC.font = "12px Segoe UI";
-        ctxGC.fillStyle = "#9aa4ff";
-        ctxGC.fillText(
-          "OEE",
-          (chartArea.left + chartArea.right) / 2,
-          chartArea.bottom + 2
-        );
-
-        ctxGC.restore();
-      },
-    },
-  ],
-});
-
-const gaugeValue = 68; // 0–100
-
-const ctx = document.getElementById("circleGauge").getContext("2d");
-
-new Chart(ctx, {
-  type: "doughnut",
-  data: {
-    datasets: [
-      {
-        data: [gaugeValue, 100 - gaugeValue],
-        backgroundColor: [
-          gaugeValue >= 80
-            ? "#52c41a"
-            : gaugeValue >= 50
-            ? "#fadb14"
-            : "#ff4d4f",
-          "rgba(255,255,255,0.05)",
-        ],
-        borderWidth: 0,
-        cutout: "88%", // thinner ring
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { display: false },
-      tooltip: { enabled: false },
-    },
-  },
-  plugins: [
-    {
-      id: "centerText",
-      afterDraw(chart) {
-        const { ctx } = chart;
-        const centerX = chart.width / 2;
-        const centerY = chart.height / 2;
-
-        ctx.save();
-
-        // Value
-        ctx.font = "600 32px Segoe UI";
-        ctx.fillStyle = "#eaeaf0";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(`${gaugeValue}%`, centerX, centerY - 4);
-
-        // Label
-        ctx.font = "12px Segoe UI";
-        ctx.fillStyle = "#9aa4ff";
-        ctx.fillText("OEE", centerX, centerY + 22);
-
-        ctx.restore();
-      },
-    },
-  ],
-});
-
-function createCircleGauge(canvasId, value, label = "OEE") {
-  const ctx = document.getElementById(canvasId).getContext("2d");
-
-  new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      datasets: [
-        {
-          data: [value, 100 - value],
-          backgroundColor: [
-            value >= 80 ? "#52c41a" : value >= 50 ? "#fadb14" : "#ff4d4f",
-            "rgba(255,255,255,0.05)",
-          ],
-          borderWidth: 0,
-          cutout: "88%",
-        },
-      ],
-    },
-    options: {
-      responsive: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { enabled: false },
-      },
-    },
-    plugins: [
-      {
-        id: "centerText",
-        afterDraw(chart) {
-          const { ctx, width, height } = chart;
-          const centerX = width / 2;
-          const centerY = height / 2;
-
-          ctx.save();
-
-          ctx.font = `${Math.floor(width / 5)}px Segoe UI`;
-          ctx.fillStyle = "#eaeaf0";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText(`${value}%`, centerX, centerY - 4);
-
-          ctx.font = `${Math.floor(width / 10)}px Segoe UI`;
-          ctx.fillStyle = "#9aa4ff";
-          ctx.fillText(label, centerX, centerY + centerY / 3);
-
-          ctx.restore();
-        },
-      },
-    ],
-  });
-}
-
-// Example values
-createCircleGauge("circleGauge1", 72, "OEE");
-createCircleGauge("circleGauge2", 55, "Yield");
-createCircleGauge("circleGauge3", 88, "Scrap");
-
-/* HEADER CLICK */
-document.getElementById("homeBtn").onclick = () => switchPage("dashboardPage");
-
-/* ================= POPOVER TOGGLE ================= */
-/* ================= POPOVER TOGGLE ================= */
-function togglePopover(tab, popover) {
-  // Hide any other open popovers
-  document.querySelectorAll(".popover").forEach((p) => {
-    if (p !== popover) p.style.display = "none";
-  });
-  document.querySelectorAll(".tab").forEach((t) => {
-    if (t !== tab) t.classList.remove("active");
-  });
-
-  const isOpen = popover.style.display === "block";
-  tab.classList.toggle("active", !isOpen);
-  if (isOpen) {
-    popover.style.display = "none";
-    return;
-  }
-
-  // Position popover directly under the tab
-  const rect = tab.getBoundingClientRect();
-  const parentRect = tab.parentElement.getBoundingClientRect(); // tab-bar
-  popover.style.top = rect.bottom - parentRect.top + 6 + "px"; // directly under tab
-  popover.style.left = rect.left - parentRect.left + "px";
-
-  // Reset previous content
-  popover.innerHTML = `
-    <div class="ai-loading">
-      <div class="spinner"></div>
-      AI Loading...
-    </div>
-    <div class="popover-content" style="display:none;"></div>
-  `;
-  const spinner = popover.querySelector(".ai-loading");
-  const contentDiv = popover.querySelector(".popover-content");
-
-  popover.style.display = "block";
-  popover.classList.add("glow");
-
-  // Simulate fetching/analyzing raw data
-  setTimeout(() => {
-    spinner.style.display = "none";
-
-    if (tab.id === "anomalyTab") {
-      // Example: convert raw anomaly data to readable language
-      const rawData = [
-        { module: "X", type: "vibration", severity: "high" },
-        { module: "Y", type: "temperature", severity: "medium" },
-      ];
-      contentDiv.innerHTML = rawData
-        .map(
-          (d) =>
-            `Anomaly detected in Module ${d.module}: ${d.type} level is ${d.severity}.`
-        )
-        .join("<br>");
-    } else if (tab.id === "maintenanceTab") {
-      // Example: convert maintenance suggestions to readable language
-      const suggestions = [
-        { module: "X", action: "lubrication", due: "next shift" },
-        { module: "Y", action: "calibration", due: "tomorrow" },
-      ];
-      contentDiv.innerHTML = suggestions
-        .map(
-          (s) =>
-            `Module ${s.module} requires ${s.action} scheduled for ${s.due}.`
-        )
-        .join("<br>");
+// ================= SIMULATION LOGIC =================
+function simulationTick() {
+    // 1. Randomize KPIs slightly
+    SYSTEM_STATE.oee = clamp(SYSTEM_STATE.oee + (Math.random() - 0.5) * 2, 60, 99);
+    SYSTEM_STATE.yield = clamp(SYSTEM_STATE.yield + (Math.random() - 0.5) * 1.5, 70, 100);
+    SYSTEM_STATE.cycleTime = clamp(SYSTEM_STATE.cycleTime + (Math.random() - 0.5) * 0.5, 40, 50);
+    
+    // 2. Anomaly Injection
+    if (Math.random() < CONFIG.anomalyChance) {
+        injectAnomaly();
     }
 
-    contentDiv.style.display = "block";
-    popover.classList.remove("glow");
-  }, 3000);
+    // 3. Update Risk based on anomalies
+    const activeAnomalies = SYSTEM_STATE.anomalies.length;
+    SYSTEM_STATE.riskScore = clamp(15 + (activeAnomalies * 20) + (Math.random() * 5), 0, 100);
+
+    // 4. Update Charts/UI
+    render();
 }
 
-anomalyTab.onclick = () => togglePopover(anomalyTab, anomalyPopover);
-maintenanceTab.onclick = () =>
-  togglePopover(maintenanceTab, maintenancePopover);
+function injectAnomaly() {
+    const modules = ['Motor A', 'Hydraulics', 'Sensor Array', 'Conveyor Belt'];
+    const types = ['Vibration High', 'Temp Warning', 'Pressure Loss', 'Voltage Spike'];
+    
+    const newAnomaly = {
+        id: Date.now(),
+        module: modules[Math.floor(Math.random() * modules.length)],
+        type: types[Math.floor(Math.random() * types.length)],
+        score: Math.floor(Math.random() * 50) + 50, // 50-100 severity
+        timestamp: new Date()
+    };
+    
+    // Keep max 5 recent anomalies
+    SYSTEM_STATE.anomalies.unshift(newAnomaly);
+    if (SYSTEM_STATE.anomalies.length > 5) SYSTEM_STATE.anomalies.pop();
+
+    // Trigger insight update
+    generateInsights();
+}
+
+function generateTimeline() {
+    // Generate 8h prediction blocks (every 30 mins = 16 blocks)
+    SYSTEM_STATE.timeline = [];
+    for (let i = 0; i < 16; i++) {
+        let status = 'ok';
+        if (i > 10 && Math.random() > 0.7) status = 'warn';
+        if (i > 14 && Math.random() > 0.8) status = 'crit';
+        SYSTEM_STATE.timeline.push(status);
+    }
+}
+
+function generateInsights() {
+    const rootCauses = [
+        "Bearing wear detected in Motor A (Confidence: 92%)",
+        "Hydraulic pressure fluctuation correlated with cycle drift",
+        "Voltage instability pattern matching known failure mode F-22"
+    ];
+
+    SYSTEM_STATE.insights = [];
+    
+    if (SYSTEM_STATE.anomalies.length > 0) {
+        // Generate context-aware insights
+        const latest = SYSTEM_STATE.anomalies[0];
+        SYSTEM_STATE.insights.push({
+            title: "ROOT CAUSE ANALYSIS",
+            items: [
+                `Correlated with ${latest.type} in ${latest.module}`,
+                rootCauses[Math.floor(Math.random() * rootCauses.length)],
+                "Probability of cascading failure: 45%"
+            ]
+        });
+        
+        // Add specific maintenance action
+        SYSTEM_STATE.insights.push({
+            title: "MAINTENANCE SUGGESTION",
+            items: [
+                `Immediate: Inspect ${latest.module} housing for debris`,
+                `Schedule: Calibration for ${latest.module} in next break`,
+                "Part req: Seal-Kit-X9 (Check inventory)"
+            ]
+        });
+    } else {
+        SYSTEM_STATE.insights.push({
+            title: "SYSTEM OPTIMIZATION",
+            items: [
+                "Process parameters are stable.",
+                "Energy consumption 2% below baseline.",
+                "Predictive model shows low risk for next 8h."
+            ]
+        });
+        
+        SYSTEM_STATE.insights.push({
+            title: "UPCOMING MAINTENANCE",
+            items: [
+                "Routine Filter Change: Due in 48h",
+                "Weekly Lubrication: Completed",
+                "Firmware Update: Scheduled for Sunday"
+            ]
+        });
+    }
+}
+
+// ================= RENDERING =================
+function render() {
+    // KPI
+    UI.kpiOEE.innerText = SYSTEM_STATE.oee.toFixed(1) + '%';
+    UI.kpiYield.innerText = SYSTEM_STATE.yield.toFixed(1) + '%';
+    UI.kpiCycle.innerText = SYSTEM_STATE.cycleTime.toFixed(1) + 's';
+    
+    const riskVal = Math.round(SYSTEM_STATE.riskScore);
+    UI.kpiRisk.innerText = riskVal;
+    UI.kpiRisk.className = 'kpi-value ' + (riskVal > 50 ? 'warning' : '');
+
+    // ANOMALIES
+    if (SYSTEM_STATE.anomalies.length === 0) {
+        UI.anomalyContainer.innerHTML = `
+            <div class="loading-state">
+                <div class="scanner-line" style="background:var(--accent-green); box-shadow:0 0 10px var(--accent-green);"></div>
+                <span style="color:var(--accent-green)">System Normal. Monitoring...</span>
+            </div>`;
+    } else {
+        UI.anomalyContainer.innerHTML = SYSTEM_STATE.anomalies.map(a => `
+            <div class="anomaly-card ${a.score > 80 ? 'critical' : 'medium'}">
+                <div class="anomaly-header">
+                    <span>${formatTime(a.timestamp)}</span>
+                    <span>ID: ${a.id.toString().slice(-4)}</span>
+                </div>
+                <div class="anomaly-title">${a.module}: ${a.type}</div>
+                <div class="anomaly-score">Severity Score: ${a.score}</div>
+            </div>
+        `).join('');
+    }
+
+    // INSIGHTS
+    UI.insightsContainer.innerHTML = SYSTEM_STATE.insights.map(insight => `
+        <div class="insight-item">
+            <span class="insight-title">${insight.title}</span>
+            <ul class="insight-list">
+                ${insight.items.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        </div>
+    `).join('');
+
+    // TIMELINE
+    UI.timelineVis.innerHTML = SYSTEM_STATE.timeline.map(status => `
+        <div class="timeline-segment ${status}"></div>
+    `).join('');
+    
+    // UPDATE TWIN OVERLAY
+    const vibrationStatus = SYSTEM_STATE.riskScore > 40 ? 'VIBRATION ALERT' : 'Vibration OK';
+    const vibrationClass = SYSTEM_STATE.riskScore > 40 ? 'warning' : '';
+    
+    UI.twinOverlay.innerHTML = `
+        <div class="overlay-tag" style="top: 20%; left: 20%;">Sensor A</div>
+        <div class="overlay-tag ${vibrationClass}" style="top: 50%; right: 10%;">${vibrationStatus}</div>
+    `;
+}
+
+// ================= UTILS =================
+function updateClock() {
+    const now = new Date();
+    UI.clock.innerText = now.toLocaleTimeString('en-GB', { hour12: false });
+}
+
+function formatTime(date) {
+    return date.toLocaleTimeString('en-GB', { hour12: false });
+}
+
+function clamp(num, min, max) {
+    return Math.min(Math.max(num, min), max);
+}
+
+// ================= BOOTSTRAP =================
+window.addEventListener('DOMContentLoaded', init);
