@@ -75,6 +75,179 @@ new Chart(document.getElementById("scrapChart"), {
   options: { plugins: { legend: { display: false } } },
 });
 
+const value = 72; // 0–100
+
+const ctxGC = document.getElementById("gaugeChart").getContext("2d");
+
+const gaugeChart = new Chart(ctxGC, {
+  type: "doughnut",
+  data: {
+    datasets: [
+      {
+        data: [value, 100 - value],
+        backgroundColor: [
+          value > 80 ? "#52c41a" : value > 50 ? "#fadb14" : "#ff4d4f",
+          "rgba(255,255,255,0.08)",
+        ],
+        borderWidth: 0,
+        cutout: "80%",
+        circumference: 180,
+        rotation: 270,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false },
+    },
+  },
+  plugins: [
+    {
+      id: "centerText",
+      afterDraw(chart) {
+        const { ctx, chartArea } = chart;
+        ctx.save();
+
+        ctxGC.font = "bold 28px Segoe UI";
+        ctxGC.fillStyle = "#eaeaf0";
+        ctxGC.textAlign = "center";
+        ctxGC.fillText(
+          `${value}%`,
+          (chartArea.left + chartArea.right) / 2,
+          chartArea.bottom - 20
+        );
+
+        ctxGC.font = "12px Segoe UI";
+        ctxGC.fillStyle = "#9aa4ff";
+        ctxGC.fillText(
+          "OEE",
+          (chartArea.left + chartArea.right) / 2,
+          chartArea.bottom + 2
+        );
+
+        ctxGC.restore();
+      },
+    },
+  ],
+});
+
+const gaugeValue = 68; // 0–100
+
+const ctx = document.getElementById("circleGauge").getContext("2d");
+
+new Chart(ctx, {
+  type: "doughnut",
+  data: {
+    datasets: [
+      {
+        data: [gaugeValue, 100 - gaugeValue],
+        backgroundColor: [
+          gaugeValue >= 80
+            ? "#52c41a"
+            : gaugeValue >= 50
+            ? "#fadb14"
+            : "#ff4d4f",
+          "rgba(255,255,255,0.05)",
+        ],
+        borderWidth: 0,
+        cutout: "88%", // thinner ring
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false },
+    },
+  },
+  plugins: [
+    {
+      id: "centerText",
+      afterDraw(chart) {
+        const { ctx } = chart;
+        const centerX = chart.width / 2;
+        const centerY = chart.height / 2;
+
+        ctx.save();
+
+        // Value
+        ctx.font = "600 32px Segoe UI";
+        ctx.fillStyle = "#eaeaf0";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`${gaugeValue}%`, centerX, centerY - 4);
+
+        // Label
+        ctx.font = "12px Segoe UI";
+        ctx.fillStyle = "#9aa4ff";
+        ctx.fillText("OEE", centerX, centerY + 22);
+
+        ctx.restore();
+      },
+    },
+  ],
+});
+
+function createCircleGauge(canvasId, value, label = "OEE") {
+  const ctx = document.getElementById(canvasId).getContext("2d");
+
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      datasets: [
+        {
+          data: [value, 100 - value],
+          backgroundColor: [
+            value >= 80 ? "#52c41a" : value >= 50 ? "#fadb14" : "#ff4d4f",
+            "rgba(255,255,255,0.05)",
+          ],
+          borderWidth: 0,
+          cutout: "88%",
+        },
+      ],
+    },
+    options: {
+      responsive: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false },
+      },
+    },
+    plugins: [
+      {
+        id: "centerText",
+        afterDraw(chart) {
+          const { ctx, width, height } = chart;
+          const centerX = width / 2;
+          const centerY = height / 2;
+
+          ctx.save();
+
+          ctx.font = `${Math.floor(width / 5)}px Segoe UI`;
+          ctx.fillStyle = "#eaeaf0";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(`${value}%`, centerX, centerY - 4);
+
+          ctx.font = `${Math.floor(width / 10)}px Segoe UI`;
+          ctx.fillStyle = "#9aa4ff";
+          ctx.fillText(label, centerX, centerY + centerY / 3);
+
+          ctx.restore();
+        },
+      },
+    ],
+  });
+}
+
+// Example values
+createCircleGauge("circleGauge1", 72, "OEE");
+createCircleGauge("circleGauge2", 55, "Yield");
+createCircleGauge("circleGauge3", 88, "Scrap");
+
 /* HEADER CLICK */
 document.getElementById("homeBtn").onclick = () => switchPage("dashboardPage");
 

@@ -265,3 +265,57 @@ model-viewer {
   border-radius: 12px;
   background: #0f1220;
 }
+
+/* Grid container for 4 model cards */
+.model-card-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px, 1fr)
+  ); /* auto-resize cards */
+  gap: 16px; /* space between cards */
+  width: 100%;
+  padding: 8px 0;
+}
+
+/* Individual model card */
+.model-card {
+  background: #1c2140;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+}
+
+/* model-viewer inside card */
+.model-card model-viewer {
+  width: 100%;
+  height: 250px; /* fixed height, adjust as needed */
+  border-radius: 8px;
+  background: #0f1220;
+}
+
+/* Card title */
+.model-card h4 {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #9aa4ff;
+}
+
+.triple-gauge-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.triple-gauge-container canvas {
+  width: 100px; /* fixed width */
+  height: 100px; /* fixed height */
+  max-width: 33%; /* prevent overflow */
+  background: #0f1220;
+  border-radius: 50%;
+}

@@ -97,6 +97,28 @@
               <canvas id="scrapChart"></canvas>
             </div>
 
+            <div class="card">
+              <h3>Production Defects</h3>
+              <canvas id="gaugeChart" width="300" height="160"></canvas>
+            </div>
+            <div class="card">
+              <h3>Yield Rate (%)</h3>
+              <canvas id="circleGauge" width="200" height="200"></canvas>
+            </div>
+            <div class="card">
+              <h3>Machine KPIs</h3>
+              <div class="triple-gauge-container">
+                <canvas id="circleGauge1"></canvas>
+                <canvas id="circleGauge2"></canvas>
+                <canvas id="circleGauge3"></canvas>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>Scrap Rate (%)</h3>
+              <canvas id="scrapChart"></canvas>
+            </div>
+
             <!-- TIMELINE -->
             <div class="card timeline-container">
               <h3>Risk & Maintenance Timeline</h3>
@@ -106,25 +128,87 @@
         </div>
 
         <!--  PAGE -->
-        <div id="analyticsPage" class="page">
-          <div class="model-container">
-            <h3>Machine Digital Twin</h3>
-            <!-- <model-viewer
-          src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models/2.0/RobotExpressive/glTF-Binary/RobotExpressive.glb"
-          alt="Industrial Robot Arm"
-          camera-controls
-          auto-rotate
-          exposure="1.1"
-          shadow-intensity="1">
-        </model-viewer> -->
-            <model-viewer
-              src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
-              alt="Damaged Helmet"
-              camera-controls
-              auto-rotate
-              background-color="#0f1220"
-            >
-            </model-viewer>
+        <div id="analyticsPage" class="page active">
+          <!-- TABS -->
+          <div class="tab-bar">
+            <div class="tab" id="anomalyTab">Anomaly Storytelling</div>
+            <div class="tab" id="maintenanceTab">Maintenance Suggestion</div>
+          </div>
+
+          <!-- POPOVERS -->
+          <div id="anomalyPopover" class="popover">
+            Anomaly detected!
+            <div class="ai-loading">
+              <div class="spinner"></div>
+              Anomaly AI...
+            </div>
+          </div>
+          <div id="maintenancePopover" class="popover">
+            Maintenance scheduled
+            <div class="ai-loading">
+              <div class="spinner"></div>
+              Quality AI...
+            </div>
+          </div>
+
+          <div class="model-card-grid">
+            <div class="model-card">
+              <model-viewer
+                src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
+                alt="Machine 1"
+                auto-rotate
+                camera-controls
+              ></model-viewer>
+              <h4>Machine 1</h4>
+            </div>
+            <div class="model-card">
+              <model-viewer
+                src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
+                alt="Machine 2"
+                auto-rotate
+                camera-controls
+              ></model-viewer>
+              <h4>Machine 2</h4>
+            </div>
+            <div class="model-card">
+              <model-viewer
+                src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
+                alt="Machine 3"
+                auto-rotate
+                camera-controls
+              ></model-viewer>
+              <h4>Machine 3</h4>
+            </div>
+            <div class="model-card">
+              <model-viewer
+                src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
+                alt="Machine 4"
+                auto-rotate
+                camera-controls
+              ></model-viewer>
+              <h4>Machine 4</h4>
+            </div>
+
+            <div class="model-container">
+              <h3>Machine Digital Twin</h3>
+              <!-- <model-viewer
+                src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models/2.0/RobotExpressive/glTF-Binary/RobotExpressive.glb"
+                alt="Industrial Robot Arm"
+                camera-controls
+                auto-rotate
+                exposure="1.1"
+                shadow-intensity="1"
+              >
+              </model-viewer> -->
+              <model-viewer
+                src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
+                alt="Damaged Helmet"
+                camera-controls
+                auto-rotate
+                background-color="#0f1220"
+              >
+              </model-viewer>
+            </div>
           </div>
         </div>
       </div>
@@ -136,6 +220,7 @@
       src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/modules/gauge.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
