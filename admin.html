@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>IFCS - Quality Management</title>
+    <title>IFCS - System Administration</title>
 
     <!-- Material Symbols for icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
@@ -33,7 +33,7 @@
                 <span class="material-symbols-outlined">assignment</span>
                 <span class="nav-text">Orders</span>
             </a>
-            <a href="quality.html" class="nav-item active" data-tooltip="Quality">
+            <a href="quality.html" class="nav-item" data-tooltip="Quality">
                 <span class="material-symbols-outlined">fact_check</span>
                 <span class="nav-text">Quality</span>
             </a>
@@ -53,7 +53,7 @@
                 <span class="material-symbols-outlined">analytics</span>
                 <span class="nav-text">Analytics</span>
             </a>
-            <a href="admin.html" class="nav-item" data-tooltip="Admin">
+            <a href="admin.html" class="nav-item active" data-tooltip="Admin">
                 <span class="material-symbols-outlined">settings</span>
                 <span class="nav-text">Admin</span>
             </a>
@@ -71,79 +71,84 @@
                     </div>
                 </div>
                 <div class="header-right">
-                    <!-- Inspection Status -->
                     <div class="status-indicator">
-                        <span class="pulse-dot"></span> LIVE SPC
+                        <span class="pulse-dot"></span> ADMIN MODE
                     </div>
                     <div class="time-display" id="clock">00:00:00</div>
                 </div>
             </header>
 
-            <!-- QUALITY GRID -->
-            <main class="quality-grid">
+            <!-- ADMIN GRID -->
+            <main class="admin-grid">
 
-                <!-- 1. SUMMARY BAR -->
-                <section class="panel q-summary">
-                    <div class="qs-item">
-                        <span class="qs-label">TOTAL INSPECTED</span>
-                        <span class="qs-val">1,248</span>
-                    </div>
-                    <div class="qs-item">
-                        <span class="qs-label">YIELD RATE</span>
-                        <span class="qs-val text-green">98.4%</span>
-                    </div>
-                    <div class="qs-item">
-                        <span class="qs-label">DEFECTS (PPM)</span>
-                        <span class="qs-val text-amber">120</span>
-                    </div>
-                    <div class="qs-item">
-                        <span class="qs-label">CAPA OPEN</span>
-                        <span class="qs-val">2</span>
-                    </div>
-                </section>
-
-                <!-- 2. SPC CHART (Main) -->
-                <section class="panel spc-panel glass-panel">
+                <!-- 1. MAIN CONFIG AREA (Left/Center) -->
+                <section class="panel admin-main-panel glass-panel">
                     <div class="panel-header">
-                        <span class="material-symbols-outlined icon-cyan">show_chart</span>
-                        SPC MONITOR - DIAMETER A (mm)
-                        <span class="header-badge" id="spc-status">STABLE</span>
+                        <div class="module-title-box">
+                            <span class="material-symbols-outlined">settings</span>
+                            SYSTEM ADMINISTRATION
+                        </div>
+                        <div class="admin-tabs">
+                            <button class="tab-btn active" data-tab="plant">PLANT REGISTRY</button>
+                            <button class="tab-btn" data-tab="users">USER & ACCESS</button>
+                            <button class="tab-btn" data-tab="master">MASTER DATA</button>
+                            <button class="tab-btn" data-tab="integrations">INTEGRATIONS</button>
+                        </div>
                     </div>
-                    <div class="chart-container">
-                        <canvas id="spcChart"></canvas>
+
+                    <div class="admin-content-area" id="admin-content">
+                        <!-- Content Injected via JS -->
                     </div>
                 </section>
 
-                <!-- 3. PARETO / DEFECTS (Right) -->
-                <section class="panel defect-panel">
-                    <div class="panel-header">DEFECT PARETO</div>
-                    <div class="chart-container-small">
-                        <canvas id="paretoChart"></canvas>
-                    </div>
-
-                    <div class="defect-list-header">RECENT LOGS</div>
-                    <div class="defect-log" id="defect-log">
-                        <!-- JS Injected -->
-                    </div>
-                </section>
-
-                <!-- 4. AI ROOT CAUSE (Bottom) -->
-                <section class="panel ai-root-panel">
+                <!-- 2. AI GOVERNANCE & QUALITY (Right) -->
+                <section class="panel admin-side-panel glass-panel">
                     <div class="panel-header">
-                        <span class="material-symbols-outlined icon-alert">psychology</span>
-                        AI ROOT CAUSE CORRELATION
+                        <span class="material-symbols-outlined icon-cyan">verified_user</span>
+                        AI GOVERNANCE
                     </div>
-                    <div id="ai-insight-content" class="ai-content-row">
-                        <!-- JS Injected -->
+
+                    <!-- Config Linter -->
+                    <div class="governance-box config-linter">
+                        <div class="gov-header">
+                            <span class="material-symbols-outlined icon-amber">warning</span>
+                            CONFIGURATION LINTER
+                        </div>
+                        <div class="gov-body" id="linter-results">
+                            <!-- Injected -->
+                            <div class="linter-item warning">
+                                <strong>Conflict Detected:</strong>
+                                Machine <code>MOLD-04</code> routing exceeds designated cycle time for
+                                <code>SKU-882</code>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Quality Monitor -->
+                    <div class="governance-box quality-monitor">
+                        <div class="gov-header">
+                            <span class="material-symbols-outlined icon-cyan">query_stats</span>
+                            DATA QUALITY FEED
+                        </div>
+                        <div class="gov-body" id="quality-feed">
+                            <div class="quality-item">
+                                <span class="q-time">10M AGO</span>
+                                <span class="q-msg">Missing tag <code>POS_X</code> on Edge-001 Gateway.</span>
+                            </div>
+                            <div class="quality-item critical">
+                                <span class="q-time">25M AGO</span>
+                                <span class="q-msg">Data drift detected on Line A Temp Sensor.</span>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
             </main>
         </div>
+    </div>
 
-        <!-- Scripts -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="js/quality.js"></script>
+    <!-- Scripts -->
+    <script src="js/admin.js"></script>
 </body>
 
 </html>
