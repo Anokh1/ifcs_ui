@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>IFCS - Performance & OEE</title>
+
+    <!-- Material Symbols for icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <nav class="sidebar">
+            <div class="brand-icon">
+                <span class="material-symbols-outlined">grid_view</span>
+            </div>
+
+            <a href="index.html" class="nav-item" data-tooltip="Hub">
+                <span class="material-symbols-outlined">home</span>
+                <span class="nav-text">Hub</span>
+            </a>
+            <a href="production.html" class="nav-item" data-tooltip="Production">
+                <span class="material-symbols-outlined">precision_manufacturing</span>
+                <span class="nav-text">Production</span>
+            </a>
+            <a href="orders.html" class="nav-item" data-tooltip="Orders">
+                <span class="material-symbols-outlined">assignment</span>
+                <span class="nav-text">Orders</span>
+            </a>
+            <a href="quality.html" class="nav-item" data-tooltip="Quality">
+                <span class="material-symbols-outlined">fact_check</span>
+                <span class="nav-text">Quality</span>
+            </a>
+            <a href="performance.html" class="nav-item active" data-tooltip="Performance">
+                <span class="material-symbols-outlined">speed</span>
+                <span class="nav-text">Performance</span>
+            </a>
+            <a href="traceability.html" class="nav-item" data-tooltip="Traceability">
+                <span class="material-symbols-outlined">account_tree</span>
+                <span class="nav-text">Traceability</span>
+            </a>
+            <a href="maintenance.html" class="nav-item" data-tooltip="Condition">
+                <span class="material-symbols-outlined">monitor_heart</span>
+                <span class="nav-text">Condition</span>
+            </a>
+            <a href="reporting.html" class="nav-item" data-tooltip="Analytics">
+                <span class="material-symbols-outlined">analytics</span>
+                <span class="nav-text">Analytics</span>
+            </a>
+        </nav>
+
+        <!-- CONTENT WRAPPER -->
+        <div class="content-wrapper">
+            <!-- HEADER -->
+            <header class="global-header">
+                <div class="header-left">
+                    <h1 class="brand-title"><span class="neon-text">IFCS</span> DASHBOARD</h1>
+                    <div class="header-meta">
+                        <span class="meta-item">LINE: <span class="highlight">A-01</span></span>
+                        <span class="meta-item">SHIFT: <span class="highlight">MORNING</span></span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="status-indicator">
+                        <span class="pulse-dot"></span> REAL-TIME
+                    </div>
+                    <div class="time-display" id="clock">00:00:00</div>
+                </div>
+            </header>
+
+            <!-- PERF GRID -->
+            <main class="perf-grid">
+
+                <!-- 1. OEE BIG NUMBERS -->
+                <section class="panel oee-panel glass-panel">
+                    <div class="oee-big">
+                        <div class="oee-circle-spin"></div>
+                        <div class="oee-text-overlay">
+                            <span class="oee-val" id="oee-main">--%</span>
+                            <span class="oee-label">OEE</span>
+                        </div>
+                    </div>
+                    <div class="oee-breakdown">
+                        <div class="breakdown-item">
+                            <div class="bd-header">
+                                <span class="bd-label">AVAILABILITY</span>
+                                <span class="bd-val" id="val-avail">--%</span>
+                            </div>
+                            <div class="bd-bar">
+                                <div class="bd-fill" id="bar-avail" style="width:0%"></div>
+                            </div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="bd-header">
+                                <span class="bd-label">PERFORMANCE</span>
+                                <span class="bd-val" id="val-perf">--%</span>
+                            </div>
+                            <div class="bd-bar">
+                                <div class="bd-fill" id="bar-perf" style="width:0%"></div>
+                            </div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="bd-header">
+                                <span class="bd-label">QUALITY</span>
+                                <span class="bd-val" id="val-qual">--%</span>
+                            </div>
+                            <div class="bd-bar">
+                                <div class="bd-fill" id="bar-qual" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel downtime-panel glass-panel">
+                    <div class="panel-header">
+                        <span class="material-symbols-outlined icon-cyan">schedule</span>
+                        DOWNTIME REASONS (SHIFT)
+                    </div>
+                    <div class="dt-content">
+                        <div class="dt-actions">
+                            <div class="dt-header">QUICK LOG</div>
+                            <button class="btn-dt" onclick="logDowntime('Jam')">Paper Jam</button>
+                            <button class="btn-dt" onclick="logDowntime('Tool')">Tool Change</button>
+                            <button class="btn-dt" onclick="logDowntime('No Op')">No Operator</button>
+                            <button class="btn-dt" onclick="logDowntime('Material')">Material Low</button>
+                        </div>
+                        <div class="chart-container-dt">
+                            <canvas id="dtChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. TIMELINE / GANTT -->
+                <section class="panel gantt-panel">
+                    <div class="panel-header">MACHINE STATE TIMELINE (1H)</div>
+                    <div class="gantt-chart" id="gantt-chart">
+                        <!-- JS Injected Segments -->
+                    </div>
+                    <div class="gantt-legend">
+                        <span class="legend-item"><span class="dot run"></span> RUN</span>
+                        <span class="legend-item"><span class="dot down"></span> DOWN</span>
+                        <span class="legend-item"><span class="dot micro"></span> MICRO-STOP</span>
+                    </div>
+                </section>
+
+                <!-- 4. SIMULATION & AI -->
+                <section class="panel sim-panel glass-panel">
+                    <div class="panel-header">
+                        <span class="material-symbols-outlined icon-cyan">science</span>
+                        IMPROVEMENT SIMULATION
+                    </div>
+                    <div class="sim-body">
+                        <!-- 1. Projected OEE (Highlight) -->
+                        <div class="sim-result">
+                            <span class="sim-label">PROJECTED OEE</span>
+                            <span class="sim-output" id="sim-output">--%</span>
+                            <div class="ai-badge hidden" id="ai-sim-badge">AI OPTIMIZED</div>
+                        </div>
+
+                        <!-- 2. Controls -->
+                        <div class="sim-controls">
+                            <label>Reduce Micro-stops</label>
+                            <input type="range" min="0" max="100" value="0" class="neon-slider" id="sim-slider"
+                                oninput="updateSim()">
+                            <span class="sim-val" id="sim-val">0%</span>
+                        </div>
+
+                        <!-- 3. Insight -->
+                        <div class="sim-insight" id="sim-insight">
+                            Increase reduction factor to see potential gains.
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="js/performance.js"></script>
+</body>
+
+</html>

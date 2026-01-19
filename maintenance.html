@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>IFCS - Maintenance & Monitoring</title>
+
+    <!-- Material Symbols for icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <div class="app-container fixed-wrapper">
+        <!-- SIDEBAR -->
+        <nav class="sidebar">
+            <div class="brand-icon">
+                <span class="material-symbols-outlined">grid_view</span>
+            </div>
+
+            <a href="index.html" class="nav-item" data-tooltip="Hub">
+                <span class="material-symbols-outlined">home</span>
+                <span class="nav-text">Hub</span>
+            </a>
+            <a href="production.html" class="nav-item" data-tooltip="Production">
+                <span class="material-symbols-outlined">precision_manufacturing</span>
+                <span class="nav-text">Production</span>
+            </a>
+            <a href="orders.html" class="nav-item" data-tooltip="Orders">
+                <span class="material-symbols-outlined">assignment</span>
+                <span class="nav-text">Orders</span>
+            </a>
+            <a href="quality.html" class="nav-item" data-tooltip="Quality">
+                <span class="material-symbols-outlined">fact_check</span>
+                <span class="nav-text">Quality</span>
+            </a>
+            <a href="performance.html" class="nav-item" data-tooltip="Performance">
+                <span class="material-symbols-outlined">speed</span>
+                <span class="nav-text">Performance</span>
+            </a>
+            <a href="traceability.html" class="nav-item" data-tooltip="Traceability">
+                <span class="material-symbols-outlined">account_tree</span>
+                <span class="nav-text">Traceability</span>
+            </a>
+            <a href="maintenance.html" class="nav-item active" data-tooltip="Condition">
+                <span class="material-symbols-outlined">monitor_heart</span>
+                <span class="nav-text">Condition</span>
+            </a>
+            <a href="reporting.html" class="nav-item" data-tooltip="Analytics">
+                <span class="material-symbols-outlined">analytics</span>
+                <span class="nav-text">Analytics</span>
+            </a>
+        </nav>
+
+        <!-- CONTENT WRAPPER -->
+        <div class="content-wrapper">
+            <!-- HEADER -->
+            <header class="global-header">
+                <div class="header-left">
+                    <h1 class="brand-title"><span class="neon-text">IFCS</span> DASHBOARD</h1>
+                    <div class="header-meta">
+                        <span class="meta-item">LINE: <span class="highlight">A-01</span></span>
+                        <span class="meta-item">SHIFT: <span class="highlight">MORNING</span></span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="status-indicator">
+                        <span class="pulse-dot"></span> MONITORING ACTIVE
+                    </div>
+                    <div class="time-display" id="clock">00:00:00</div>
+                </div>
+            </header>
+
+            <!-- MAINTENANCE GRID (3 Columns) -->
+            <main class="maint-grid">
+
+                <!-- 1. ALARM MANAGEMENT (Left) -->
+                <section class="panel alarm-panel glass-panel">
+                    <div class="panel-header">
+                        <span class="material-symbols-outlined icon-alert">notifications_active</span>
+                        ACTIVE ALARMS
+                    </div>
+                    <div class="alarm-controls">
+                        <button class="btn-filter active">ALL</button>
+                        <button class="btn-filter">CRITICAL</button>
+                        <button class="btn-filter">WARNING</button>
+                    </div>
+                    <div class="alarm-list" id="alarm-list">
+                        <!-- Injected via JS -->
+                    </div>
+                </section>
+
+                <!-- 2. CONDITION MONITORING (Center) -->
+                <section class="panel condition-panel glass-panel">
+                    <div class="panel-header">
+                        <span class="material-symbols-outlined icon-cyan">monitor_heart</span>
+                        SENSOR HEALTH & TRENDS
+                    </div>
+                    <div class="condition-grid">
+                        <div class="chart-box">
+                            <div class="chart-header">VIBRATION (mm/s)</div>
+                            <canvas id="vibChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <div class="chart-header">TEMPERATURE (°C)</div>
+                            <canvas id="tempChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="ai-insight-box">
+                        <span class="material-symbols-outlined icon-cyan">auto_awesome</span>
+                        <span id="ai-condition-msg">AI Analysis: Vibration patterns within nominal range.</span>
+                    </div>
+                </section>
+
+                <!-- 3. MAINTENANCE SCHEDULE (Right) -->
+                <section class="panel schedule-panel glass-panel">
+                    <div class="panel-header">
+                        <span class="material-symbols-outlined icon-cyan">calendar_month</span>
+                        PREVENTIVE MAINTENANCE
+                    </div>
+                    <div class="health-gauge-container">
+                        <div class="health-gauge">
+                            <svg viewBox="0 0 36 36" class="circular-chart">
+                                <path class="circle-bg"
+                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="circle" id="health-circle" stroke-dasharray="85, 100"
+                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                            <div class="health-text">
+                                <span class="h-val">85%</span>
+                                <span class="h-label">ASSET HEALTH</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="schedule-list" id="schedule-list">
+                        <!-- Injected via JS -->
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="js/maintenance.js"></script>
+</body>
+
+</html>

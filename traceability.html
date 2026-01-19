@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>IFCS - Traceability & Genealogy</title>
+
+    <!-- Material Symbols for icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <div class="app-container fixed-wrapper">
+        <!-- SIDEBAR -->
+        <nav class="sidebar">
+            <div class="brand-icon">
+                <span class="material-symbols-outlined">grid_view</span>
+            </div>
+
+            <a href="index.html" class="nav-item" data-tooltip="Hub">
+                <span class="material-symbols-outlined">home</span>
+                <span class="nav-text">Hub</span>
+            </a>
+            <a href="production.html" class="nav-item" data-tooltip="Production">
+                <span class="material-symbols-outlined">precision_manufacturing</span>
+                <span class="nav-text">Production</span>
+            </a>
+            <a href="orders.html" class="nav-item" data-tooltip="Orders">
+                <span class="material-symbols-outlined">assignment</span>
+                <span class="nav-text">Orders</span>
+            </a>
+            <a href="quality.html" class="nav-item" data-tooltip="Quality">
+                <span class="material-symbols-outlined">fact_check</span>
+                <span class="nav-text">Quality</span>
+            </a>
+            <a href="performance.html" class="nav-item" data-tooltip="Performance">
+                <span class="material-symbols-outlined">speed</span>
+                <span class="nav-text">Performance</span>
+            </a>
+            <a href="traceability.html" class="nav-item active" data-tooltip="Traceability">
+                <span class="material-symbols-outlined">account_tree</span>
+                <span class="nav-text">Traceability</span>
+            </a>
+            <a href="maintenance.html" class="nav-item" data-tooltip="Condition">
+                <span class="material-symbols-outlined">monitor_heart</span>
+                <span class="nav-text">Condition</span>
+            </a>
+            <a href="reporting.html" class="nav-item" data-tooltip="Analytics">
+                <span class="material-symbols-outlined">analytics</span>
+                <span class="nav-text">Analytics</span>
+            </a>
+        </nav>
+
+        <!-- CONTENT WRAPPER -->
+        <div class="content-wrapper">
+            <!-- HEADER -->
+            <header class="global-header">
+                <div class="header-left">
+                    <h1 class="brand-title"><span class="neon-text">IFCS</span> DASHBOARD</h1>
+                    <div class="header-meta">
+                        <span class="meta-item">LINE: <span class="highlight">A-01</span></span>
+                        <span class="meta-item">SHIFT: <span class="highlight">MORNING</span></span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="status-indicator">
+                        <span class="pulse-dot"></span> LIVE QUERY
+                    </div>
+                    <div class="time-display" id="clock">00:00:00</div>
+                </div>
+            </header>
+
+            <!-- TRACE GRID -->
+            <main class="trace-grid">
+                <!-- 1. SEARCH & METRICS -->
+                <section class="panel search-panel glass-panel">
+                    <div class="search-bar">
+                        <span class="material-symbols-outlined icon-cyan">search</span>
+                        <input type="text" id="lot-search" placeholder="Enter Lot ID or Serial Number..."
+                            value="LOT-2024-001" onchange="runTrace()">
+                        <button class="btn-neon" onclick="runTrace()">TRACE</button>
+                    </div>
+                    <div class="trace-metrics">
+                        <div class="t-metric">
+                            <span class="tm-label">TOTAL UNITS</span>
+                            <span class="tm-val" id="tm-units">842</span>
+                        </div>
+                        <div class="t-metric">
+                            <span class="tm-label">RISK LEVEL</span>
+                            <span class="tm-val" id="tm-risk">LOW</span>
+                        </div>
+                        <div class="t-metric">
+                            <span class="tm-label">STATUS</span>
+                            <span class="tm-val text-green" id="tm-status">RELEASED</span>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <div class="trace-content-2x2">
+                <!-- 2. GENEALOGY TREE -->
+                <section class="panel genealogy-panel">
+                    <div class="panel-header">
+                        <span class="material-symbols-outlined icon-cyan">account_tree</span>
+                        LOT GENEALOGY TREE
+                    </div>
+                    <div class="tree-container" id="tree-container">
+                        <!-- JS will inject nodes here -->
+                    </div>
+                </section>
+
+                <!-- 3. MATERIAL CONSUMPTION -->
+                <section class="panel material-panel glass-panel">
+                    <div class="panel-header">
+                        <span class="material-symbols-outlined icon-cyan">category</span>
+                        MATERIAL CONSUMPTION
+                    </div>
+                    <div class="mat-table-wrapper">
+                        <table class="mat-table">
+                            <thead>
+                                <tr>
+                                    <th>MATERIAL</th>
+                                    <th>BATCH</th>
+                                    <th>QTY</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mat-body">
+                                <!-- JS injected -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 4. PROCESS PARAMETERS -->
+                <section class="panel process-panel glass-panel">
+                    <div class="panel-header">
+                        <span class="material-symbols-outlined icon-cyan">tune</span>
+                        CRITICAL PROCESS PARAMETERS
+                    </div>
+                    <div class="chart-container-trace">
+                        <canvas id="paramChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- 5. AI RISK ANALYSIS -->
+                <!-- <section class="panel risk-panel glass-panel">
+                <div class="panel-header">
+                    <span class="material-symbols-outlined icon-cyan">psychology</span>
+                    AI RISK & CONTAINMENT
+                </div>
+                <div class="risk-body">
+                    <div class="risk-score-box">
+                        <div class="risk-circle low" id="risk-circle">
+                            <span class="risk-val" id="risk-val">12%</span>
+                        </div>
+                        <span class="risk-label">DRIFT PROBABILITY</span>
+                    </div>
+                    <div class="risk-advice" id="risk-advice">
+                        Analysis indicates normal process conditions. No containment required.
+                    </div>
+                </div>
+                <div class="ai-badge" id="ai-trace-badge">AI ANALYSIS COMPLETE</div>
+            </section> -->
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="js/traceability.js"></script>
+</body>
+
+</html>
