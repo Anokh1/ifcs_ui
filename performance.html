@@ -129,10 +129,12 @@
                     <div class="dt-content">
                         <div class="dt-actions">
                             <div class="dt-header">QUICK LOG</div>
-                            <button class="btn-dt" onclick="logDowntime('Jam')">Paper Jam</button>
-                            <button class="btn-dt" onclick="logDowntime('Tool')">Tool Change</button>
-                            <button class="btn-dt" onclick="logDowntime('No Op')">No Operator</button>
-                            <button class="btn-dt" onclick="logDowntime('Material')">Material Low</button>
+                            <div class="dt-buttons-row">
+                                <button class="btn-dt jam" onclick="logDowntime('Jam')">Paper Jam</button>
+                                <button class="btn-dt tool" onclick="logDowntime('Tool')">Tool Change</button>
+                                <button class="btn-dt op" onclick="logDowntime('No Operator')">No Operator</button>
+                                <button class="btn-dt mat" onclick="logDowntime('Material')">Material Low</button>
+                            </div>
                         </div>
                         <div class="chart-container-dt">
                             <canvas id="dtChart"></canvas>

@@ -11,7 +11,7 @@ const CONFIG = {
 };
 
 // State
-let dtCounts = { 'Jam': 15, 'Tool': 8, 'Material': 5, 'No Op': 2, 'Other': 4 };
+let dtCounts = { 'Jam': 15, 'Tool': 12, 'Material': 8, 'No Operator': 5, 'Other': 3 };
 let chartDT;
 let currentOEE = 0;
 
@@ -94,27 +94,37 @@ function initChart() {
             datasets: [{
                 data: Object.values(dtCounts),
                 backgroundColor: [
-                    'rgba(255, 51, 102, 0.7)',
-                    'rgba(255, 204, 0, 0.7)',
-                    'rgba(0, 243, 255, 0.7)',
-                    '#555',
-                    '#888'
+                    'rgba(255, 0, 85, 0.8)',  /* Neon Pink (Jam) */
+                    'rgba(255, 170, 0, 0.8)', /* Neon Amber (Tool) */
+                    'rgba(0, 243, 255, 0.8)', /* Neon Cyan (Material) */
+                    'rgba(157, 0, 255, 0.8)', /* Neon Purple (No Operator) */
+                    'rgba(51, 255, 153, 0.8)' /* Neon Green (Other) */
                 ],
-                borderColor: '#12141e',
-                borderWidth: 2
+                borderColor: 'rgba(18, 20, 30, 0.8)',
+                borderWidth: 3
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'right', labels: { color: '#8b9bb4', font: { size: 10 }, boxWidth: 10, padding: 15 } }
+                legend: {
+                    position: 'top',
+                    align: 'center',
+                    labels: {
+                        color: '#8b9bb4',
+                        font: { size: 10, family: 'Orbitron' },
+                        boxWidth: 10,
+                        padding: 15
+                    }
+                }
             },
-            cutout: '70%', /* Thinner ring = Futuristic */
-            layout: { padding: 20 }, /* Reduce overall size */
-            borderColor: 'rgba(0,0,0,0.5)',
-            borderWidth: 2,
-            offset: 4
+            cutout: '70%',
+            layout: {
+                padding: { top: 10, bottom: 20 }
+            },
+            borderColor: 'transparent',
+            offset: 5
         }
     });
 }
