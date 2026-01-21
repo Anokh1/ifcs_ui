@@ -128,10 +128,22 @@
           </div>
           <div class="twin-container" id="model-container">
             <!-- Model Viewer will be injected here or exist here -->
-            <model-viewer id="main-viewer"
+            <!-- <model-viewer id="main-viewer"
               src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
               alt="Digital Twin" auto-rotate camera-controls background-color="transparent" bounds="tight" enable-pan
-              interaction-prompt="auto"></model-viewer>
+              interaction-prompt="auto"></model-viewer> -->
+
+            <img
+              id="main-viewer"
+              src="./image/green_machine.jpg"
+              alt="Digital Twin"
+              style="
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                background: transparent;
+              "
+            />
 
             <!-- Overlays -->
             <div class="twin-overlay" id="twin-overlay">
