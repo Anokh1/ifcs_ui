@@ -1,2 +1,4 @@
 *.glb
 *.gltf
+model/*.glb
+model/*.gltf
